@@ -1,0 +1,1177 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+<title>Star Shop</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet">
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- BACKGROUND VIDEO -->
+<video id="backgroundVideo" autoplay muted loop playsinline preload="auto"></video>
+<div class="videoOverlay"></div>
+
+<!-- HOME SCREEN -->
+<div id="homeScreen">
+
+    <div class="heartBalance">
+        <i class="fa-solid fa-heart"></i>
+        <span>0</span>
+    </div>
+
+    <div class="homeTop">
+        <button class="settingButton" onclick="handleButtonClick('settingsScreen')">
+            <i class="fa-solid fa-gear"></i>
+        </button>
+    </div>
+
+    <div class="homeContent">
+
+        <button class="buyButton" onclick="handleButtonClick('diamondsScreen')">
+            <i class="fa-solid fa-gem"></i>
+            <span>ဝယ်ယူမည်</span>
+        </button>
+
+        <div class="bottomMenu">
+            <button class="menuButton active" onclick="handleButtonClick('homeNewScreen')">
+                <i class="fa-solid fa-house"></i>
+                <span>Home</span>
+            </button>
+            <button class="menuButton" onclick="handleButtonClick('chatScreen')">
+                <i class="fa-solid fa-comments"></i>
+                <span>Chat</span>
+            </button>
+            <button class="menuButton" onclick="handleButtonClick('historyScreen')">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>မှတ်တမ်း</span>
+            </button>
+            <button class="menuButton" onclick="handleButtonClick('faqScreen')">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>FAQ</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- HOME SCREEN (NEW) -->
+<div id="homeNewScreen" class="screen">
+    <div class="screenHeader">
+        <button class="backButton" onclick="showHome()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="screenTitle">Home</div>
+    </div>
+    <div class="screenBody">
+        <div class="emptyArea"></div>
+    </div>
+</div>
+
+<!-- BUY SCREEN (All MM Server Items) -->
+<div id="diamondsScreen" class="screen">
+    <div class="screenHeader">
+        <button class="backButton" onclick="showHome()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="screenTitle">ဝယ်ယူမည်</div>
+    </div>
+    <div class="screenBody" id="diamondsBody">
+        <!-- Sections will be injected by JS -->
+    </div>
+</div>
+
+<!-- CHAT SCREEN -->
+<div id="chatScreen" class="screen">
+    <div class="screenHeader">
+        <button class="backButton" onclick="showHome()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="screenTitle">Chat</div>
+    </div>
+    <div class="screenBody">
+        <div class="emptyArea"></div>
+    </div>
+</div>
+
+<!-- HISTORY SCREEN -->
+<div id="historyScreen" class="screen">
+    <div class="screenHeader">
+        <button class="backButton" onclick="showHome()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="screenTitle">မှတ်တမ်း</div>
+    </div>
+    <div class="screenBody">
+        <div class="emptyArea"></div>
+    </div>
+</div>
+
+<!-- FAQ SCREEN -->
+<div id="faqScreen" class="screen">
+    <div class="screenHeader">
+        <button class="backButton" onclick="showHome()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="screenTitle">FAQ</div>
+    </div>
+    <div class="screenBody">
+        <div class="emptyArea"></div>
+    </div>
+</div>
+
+<!-- SETTINGS SCREEN -->
+<div id="settingsScreen" class="screen">
+    <div class="screenHeader">
+        <button class="backButton" onclick="showHome()">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <div class="screenTitle">Setting</div>
+    </div>
+    <div class="screenBody" id="settingsBody">
+        <!-- Settings content will be injected by JS -->
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html><style>/* =========================================================
+   RESET
+========================================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: "Inter", sans-serif;
+    background: #000;
+    color: #fff;
+}
+
+/* =========================================================
+   BACKGROUND VIDEO
+========================================================= */
+#backgroundVideo {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    background: #000;
+}
+
+.videoOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+        180deg,
+        rgba(0,0,0,0.10) 0%,
+        rgba(0,0,0,0.03) 35%,
+        rgba(0,0,0,0.45) 100%
+    );
+}
+
+/* =========================================================
+   HOME
+========================================================= */
+#homeScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 5;
+}
+
+/* =========================================================
+   HEART BALANCE
+========================================================= */
+.heartBalance {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    height: 38px;
+    min-width: 68px;
+    padding: 0 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.26);
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.055));
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.16);
+    z-index: 20;
+}
+
+.heartBalance i {
+    color: #ff6684;
+    font-size: 14px;
+    filter: drop-shadow(0 0 8px rgba(255,80,115,0.50));
+}
+
+.heartBalance span {
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   SETTING
+========================================================= */
+.homeTop {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    z-index: 20;
+}
+
+.settingButton {
+    width: 39px;
+    height: 39px;
+    border: 1px solid rgba(255,255,255,0.30);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.18);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.settingButton:active { transform: scale(.92); }
+
+/* =========================================================
+   HOME CONTENT
+========================================================= */
+.homeContent {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 74px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+/* =========================================================
+   BUY BUTTON
+========================================================= */
+.buyButton {
+    position: relative;
+    width: 240px;
+    height: 42px;
+    border: 1px solid rgba(255,255,255,0.30);
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0.07));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 700;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.20);
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform .2s;
+}
+
+.buyButton::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -110%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.17), transparent);
+    transform: skewX(-20deg);
+    animation: buyShine 5s infinite;
+}
+
+@keyframes buyShine {
+    0% { left: -110%; }
+    45%, 100% { left: 140%; }
+}
+
+.buyButton i, .buyButton span { position: relative; z-index: 2; }
+.buyButton i { font-size: 11px; }
+.buyButton:active { transform: scale(.95); }
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+.bottomMenu {
+    width: 86vw;
+    max-width: 350px;
+    height: 46px;
+    padding: 3px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.055));
+    border: 1px solid rgba(255,255,255,0.25);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 12px 38px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.17);
+}
+
+.menuButton {
+    position: relative;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: rgba(255,255,255,0.72);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-family: inherit;
+    font-size: 6.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, color .2s, transform .2s;
+}
+
+.menuButton i { font-size: 11px; }
+
+.menuButton.active {
+    color: #fff;
+    background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0.08));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.14);
+}
+
+.menuButton:active { transform: scale(.91); }
+
+/* =========================================================
+   ALL SCREENS
+========================================================= */
+.screen {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    flex-direction: column;
+    background: linear-gradient(180deg, rgba(7,7,12,0.82), rgba(0,0,0,0.94));
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+}
+
+.screen.active { display: flex; }
+
+/* =========================================================
+   SCREEN HEADER
+========================================================= */
+.screenHeader {
+    width: 100%;
+    min-height: 62px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.045);
+    border-bottom: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    flex-shrink: 0;
+}
+
+.backButton {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.20);
+    background: rgba(255,255,255,0.09);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.backButton:active { transform: scale(.90); }
+
+.screenTitle {
+    margin-left: 12px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   SCREEN BODY (Scroll Enabled)
+========================================================= */
+.screenBody {
+    flex: 1;
+    width: 100%;
+    padding: 18px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.30) transparent;
+}
+
+.screenBody::-webkit-scrollbar {
+    width: 5px;
+}
+
+.screenBody::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.screenBody::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 3px;
+}
+
+.emptyArea {
+    width: 100%;
+    min-height: 100%;
+}
+
+/* =========================================================
+   SECTION TITLES
+========================================================= */
+.mm-section {
+    margin-bottom: 22px;
+}
+
+.mm-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(255,142,170,0.20), rgba(255,107,145,0.10));
+    border: 1px solid rgba(255,142,170,0.30);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 15px rgba(255,107,145,0.10);
+}
+
+.mm-section-title i {
+    color: #ff8eaa;
+    font-size: 14px;
+    filter: drop-shadow(0 0 6px rgba(255,107,145,0.50));
+}
+
+/* =========================================================
+   MM SERVER GRID (3 columns)
+========================================================= */
+.mm-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    width: 100%;
+}
+
+.mm-card {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.mm-card:active {
+    transform: scale(.95);
+}
+
+.mm-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    background: rgba(0,0,0,0.20);
+    display: block;
+}
+
+.mm-card-info {
+    padding: 6px 4px;
+    text-align: center;
+    background: rgba(255,255,255,0.06);
+}
+
+.mm-card-name {
+    font-size: 9px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 3px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.mm-card-price {
+    font-size: 9px;
+    font-weight: 700;
+    color: #ff8eaa;
+}
+
+/* =========================================================
+   SETTINGS UI
+========================================================= */
+.settings-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.settings-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.settings-card-title i {
+    color: #ff8eaa;
+    font-size: 14px;
+}
+
+.settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 11px;
+    color: rgba(255,255,255,0.85);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.settings-row:last-child {
+    border-bottom: none;
+}
+
+.settings-row .label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.settings-row .label i {
+    color: rgba(255,255,255,0.55);
+    font-size: 11px;
+    width: 14px;
+}
+
+.settings-row .value {
+    font-weight: 700;
+    color: #ff8eaa;
+}
+
+.settings-button {
+    width: 100%;
+    padding: 13px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all .2s;
+}
+
+.settings-button.primary {
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    color: #fff;
+    box-shadow: 0 8px 25px rgba(255,75,120,0.30);
+}
+
+.settings-button.danger {
+    background: linear-gradient(135deg, rgba(255,75,75,0.20), rgba(255,45,45,0.10));
+    border: 1px solid rgba(255,75,75,0.35);
+    color: #ff8888;
+}
+
+.settings-button:active {
+    transform: scale(.97);
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+@media (max-width: 600px) {
+
+    .heartBalance {
+        top: 17px;
+        left: 16px;
+        height: 36px;
+        min-width: 64px;
+        padding: 0 10px;
+        gap: 6px;
+    }
+
+    .heartBalance i { font-size: 13px; }
+    .heartBalance span { font-size: 10px; }
+
+    .homeTop { top: 16px; right: 16px; }
+
+    .homeContent { bottom: 74px; gap: 7px; }
+
+    .buyButton {
+        width: 240px;
+        height: 41px;
+        border-radius: 13px;
+        font-size: 10px;
+    }
+
+    .bottomMenu {
+        width: 86vw;
+        height: 46px;
+        padding: 3px;
+        gap: 2px;
+        border-radius: 15px;
+    }
+
+    .menuButton {
+        height: 38px;
+        border-radius: 10px;
+        font-size: 6.5px;
+    }
+
+    .menuButton i { font-size: 11px; }
+
+    .mm-grid-3 { gap: 8px; }
+    .mm-card-name { font-size: 8px; }
+    .mm-card-price { font-size: 8px; }
+}</style><script>/* =========================================================
+   VIDEO SOURCES
+========================================================= */
+
+const RANDOM_VIDEOS = [
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_140553562.mp4",
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_140338500.mp4",
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_140059033.mp4",
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_135833179.mp4"
+];
+
+const INTRO_VIDEO =
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/882df19393b5af7c09e7a75e2dc3068cc9cdfad2/InShot_20261013_135055675.mp4";
+
+const LOOP_VIDEO =
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/dc81bbbb2c63756cbe88a4bba4059e28d4acafb6/InShot_20261013_141016478.mp4";
+
+const ALL_VIDEO_URLS = [...RANDOM_VIDEOS, INTRO_VIDEO, LOOP_VIDEO];
+
+/* =========================================================
+   MM SERVER DATA (Sections)
+========================================================= */
+
+const MM_PASSES = [
+    { name: "Weekly Pass", price: "6,600 Ks", image: "https://i.ibb.co/cK8h3WvH/Grid-Art-20251216-174338901.jpg" },
+    { name: "Miya Twilight Pass", price: "35,000 Ks", image: "https://i.ibb.co/ycM9HS3s/Grid-Art-20251229-175041122.jpg" }
+];
+
+const MM_2X = [
+    { name: "50+50 Diamonds", price: "3,500 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg" },
+    { name: "150+150 Diamonds", price: "10,300 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
+    { name: "250+250 Diamonds", price: "16,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg" },
+    { name: "500+500 Diamonds", price: "33,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg" }
+];
+
+const MM_ALL_DIAMONDS = [
+    { name: "14 Diamonds", price: "1,400 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
+    { name: "28 Diamonds", price: "2,500 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
+    { name: "42 Diamonds", price: "3,800 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
+    { name: "55 Diamonds", price: "4,700 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
+    { name: "86 Diamonds", price: "5,600 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
+    { name: "112 Diamonds", price: "7,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "172 Diamonds", price: "10,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "257 Diamonds", price: "15,700 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "343 Diamonds", price: "20,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "429 Diamonds", price: "26,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "514 Diamonds", price: "30,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "600 Diamonds", price: "36,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "706 Diamonds", price: "41,500 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "878 Diamonds", price: "51,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "963 Diamonds", price: "56,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
+    { name: "1049 Diamonds", price: "62,700 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
+    { name: "1135 Diamonds", price: "67,500 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
+    { name: "1412 Diamonds", price: "83,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
+    { name: "2195 Diamonds", price: "125,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg" },
+    { name: "2901 Diamonds", price: "166,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg" },
+    { name: "3688 Diamonds", price: "209,500 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg" },
+    { name: "5532 Diamonds", price: "315,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg" },
+    { name: "9288 Diamonds", price: "520,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg" }
+];
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+const video = document.getElementById("backgroundVideo");
+
+/* =========================================================
+   STATE
+========================================================= */
+let introPlayed = false;
+let tapLocked   = true;
+
+/* =========================================================
+   INDEXEDDB SETUP
+========================================================= */
+const DB_NAME    = "StarShopDB";
+const DB_VERSION = 1;
+const STORE_NAME = "videos";
+
+let dbInstance = null;
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        if (dbInstance) {
+            return resolve(dbInstance);
+        }
+
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, { keyPath: "url" });
+            }
+        };
+
+        request.onsuccess = (event) => {
+            dbInstance = event.target.result;
+            resolve(dbInstance);
+        };
+
+        request.onerror = (event) => {
+            reject(event.target.error);
+        };
+    });
+}
+
+/* Get single video blob from DB */
+async function getVideoFromDB(url) {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, "readonly");
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.get(url);
+
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) {
+        console.warn("getVideoFromDB error:", e);
+        return null;
+    }
+}
+
+/* Save video blob to DB */
+async function saveVideoToDB(url, blob) {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, "readwrite");
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.put({
+                url: url,
+                blob: blob,
+                size: blob.size,
+                savedAt: Date.now()
+            });
+
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) {
+        console.warn("saveVideoToDB error:", e);
+        return false;
+    }
+}
+
+/* Get all cached video records */
+async function getAllVideosFromDB() {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, "readonly");
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.getAll();
+
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) {
+        console.warn("getAllVideosFromDB error:", e);
+        return [];
+    }
+}
+
+/* Clear all cached videos */
+async function clearAllVideosFromDB() {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_NAME, "readwrite");
+            const store = tx.objectStore(STORE_NAME);
+            const req = store.clear();
+
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) {
+        console.warn("clearAllVideosFromDB error:", e);
+        return false;
+    }
+}
+
+/* =========================================================
+   VIDEO CACHE MANAGER
+========================================================= */
+
+/* videoCache: { url: blobURL } */
+const videoCache = {};
+
+/* Setup src of video -- Prefer Blob URL from cache */
+async function setVideoSource(url, { loop = true } = {}) {
+    let src = url;
+
+    // 1. In-memory cache
+    if (videoCache[url]) {
+        src = videoCache[url];
+    } else {
+        // 2. IndexedDB
+        const record = await getVideoFromDB(url);
+        if (record && record.blob) {
+            const blobURL = URL.createObjectURL(record.blob);
+            videoCache[url] = blobURL;
+            src = blobURL;
+        }
+    }
+
+    video.loop = loop;
+    video.src  = src;
+    video.muted = true;
+    video.load();
+    video.play().catch(() => {});
+}
+
+/* Download all videos (in background) and cache them */
+async function cacheAllVideos() {
+    for (const url of ALL_VIDEO_URLS) {
+        try {
+            // Skip if already in DB
+            const existing = await getVideoFromDB(url);
+            if (existing && existing.blob) {
+                const blobURL = URL.createObjectURL(existing.blob);
+                videoCache[url] = blobURL;
+                continue;
+            }
+
+            // Fetch and store
+            const response = await fetch(url, { mode: "cors" });
+            if (!response.ok) continue;
+            const blob = await response.blob();
+            await saveVideoToDB(url, blob);
+
+            const blobURL = URL.createObjectURL(blob);
+            videoCache[url] = blobURL;
+
+        } catch (e) {
+            console.warn("Failed to cache video:", url, e);
+        }
+    }
+}
+
+/* =========================================================
+   RENDER MM SERVER LIST (Sections)
+========================================================= */
+function createCardHTML(item) {
+    return `
+        <div class="mm-card">
+            <img src="${item.image}" alt="${item.name}" loading="lazy">
+            <div class="mm-card-info">
+                <div class="mm-card-name">${item.name}</div>
+                <div class="mm-card-price">${item.price}</div>
+            </div>
+        </div>
+    `;
+}
+
+function renderSection(title, icon, items) {
+    let html = `
+        <div class="mm-section">
+            <div class="mm-section-title">
+                <i class="${icon}"></i>
+                <span>${title}</span>
+            </div>
+            <div class="mm-grid-3">
+    `;
+    items.forEach(item => { html += createCardHTML(item); });
+    html += `</div></div>`;
+    return html;
+}
+
+function renderMMServers() {
+    const body = document.getElementById("diamondsBody");
+    if (!body) return;
+
+    let html = "";
+    html += renderSection("Pass", "fa-solid fa-star", MM_PASSES);
+    html += renderSection("2x Diamonds", "fa-solid fa-gift", MM_2X);
+    html += renderSection("All Diamonds", "fa-solid fa-gem", MM_ALL_DIAMONDS);
+
+    body.innerHTML = html;
+}
+
+/* =========================================================
+   SETTINGS PAGE
+========================================================= */
+async function renderSettings() {
+    const body = document.getElementById("settingsBody");
+    if (!body) return;
+
+    const cachedRecords = await getAllVideosFromDB();
+    const cachedUrls = cachedRecords.map(r => r.url);
+
+    // Calculate size
+    let totalSize = 0;
+    cachedRecords.forEach(r => { totalSize += (r.size || 0); });
+    const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
+
+    // Build rows
+    let cachedRows = "";
+    ALL_VIDEO_URLS.forEach((url, i) => {
+        const isCached = cachedUrls.includes(url);
+        const fileName = url.split("/").pop();
+        const statusIcon = isCached
+            ? '<i class="fa-solid fa-circle-check" style="color:#6ee7a7;"></i>'
+            : '<i class="fa-solid fa-circle-xmark" style="color:#ff8888;"></i>';
+        const statusText = isCached ? "Downloaded" : "Not downloaded";
+
+        cachedRows += `
+            <div class="settings-row">
+                <div class="label">
+                    ${statusIcon}
+                    <span>Video ${i + 1}</span>
+                </div>
+                <div class="value" style="font-size:10px;font-weight:600;">
+                    ${statusText}
+                </div>
+            </div>
+        `;
+    });
+
+    const totalVideos = ALL_VIDEO_URLS.length;
+    const cachedCount = cachedUrls.length;
+    const availCount  = totalVideos - cachedCount;
+
+    body.innerHTML = `
+        <div class="settings-card">
+            <div class="settings-card-title">
+                <i class="fa-solid fa-database"></i>
+                <span>IndexedDB Storage</span>
+            </div>
+            <div class="settings-row">
+                <div class="label">
+                    <i class="fa-solid fa-video"></i>
+                    <span>Total Videos</span>
+                </div>
+                <div class="value">${totalVideos}</div>
+            </div>
+            <div class="settings-row">
+                <div class="label">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Downloaded (Cached)</span>
+                </div>
+                <div class="value">${cachedCount}</div>
+            </div>
+            <div class="settings-row">
+                <div class="label">
+                    <i class="fa-solid fa-cloud"></i>
+                    <span>Available (Not Cached)</span>
+                </div>
+                <div class="value">${availCount}</div>
+            </div>
+            <div class="settings-row">
+                <div class="label">
+                    <i class="fa-solid fa-hard-drive"></i>
+                    <span>Total Size</span>
+                </div>
+                <div class="value">${sizeMB} MB</div>
+            </div>
+        </div>
+
+        <div class="settings-card">
+            <div class="settings-card-title">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Cached Videos Status</span>
+            </div>
+            ${cachedRows}
+        </div>
+
+        <div class="settings-card">
+            <div class="settings-card-title">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Actions</span>
+            </div>
+            <button class="settings-button primary" onclick="manualCacheAll()">
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+                All Data Download
+            </button>
+            <button class="settings-button danger" onclick="manualClearAll()">
+                <i class="fa-solid fa-trash-can"></i>
+                All Data Clear
+            </button>
+        </div>
+    `;
+}
+
+/* Manual cache all */
+async function manualCacheAll() {
+    alert("Downloading all videos...\nPlease wait.");
+    await cacheAllVideos();
+    alert("All videos downloaded and cached!");
+    renderSettings();
+}
+
+/* Manual clear all */
+async function manualClearAll() {
+    if (!confirm("Are you sure you want to clear all cached videos?")) return;
+
+    // Revoke blob URLs
+    Object.values(videoCache).forEach(url => {
+        try { URL.revokeObjectURL(url); } catch (e) {}
+    });
+    Object.keys(videoCache).forEach(k => delete videoCache[k]);
+
+    await clearAllVideosFromDB();
+    alert("All cached data cleared!");
+    renderSettings();
+}
+
+/* =========================================================
+   VIDEO FLOW
+========================================================= */
+async function playRandomVideo() {
+    const randomIndex = Math.floor(Math.random() * RANDOM_VIDEOS.length);
+    await setVideoSource(RANDOM_VIDEOS[randomIndex], { loop: true });
+}
+
+async function handleFirstTap() {
+    if (introPlayed) return;
+    introPlayed = true;
+
+    // Intro video -- loop false
+    await setVideoSource(INTRO_VIDEO, { loop: false });
+
+    // When intro ends, switch to loop video
+    video.onended = async () => {
+        await setVideoSource(LOOP_VIDEO, { loop: true });
+        tapLocked = false;
+    };
+
+    // Safety fallback: if 'ended' doesn't fire, unlock after 15s
+    setTimeout(() => {
+        if (tapLocked) {
+            tapLocked = false;
+            setVideoSource(LOOP_VIDEO, { loop: true });
+        }
+    }, 15000);
+}
+
+/* =========================================================
+   BUTTON HANDLE (Lock Screen until Intro played)
+========================================================= */
+function handleButtonClick(screenId) {
+    if (tapLocked) return;
+    showScreen(screenId);
+}
+
+/* =========================================================
+   SHOW SCREEN / HOME
+========================================================= */
+function showScreen(screenId) {
+    if (tapLocked) return;
+
+    document.getElementById("homeScreen").style.display = "none";
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+
+    const target = document.getElementById(screenId);
+    if (target) target.classList.add("active");
+
+    // If settings, render it
+    if (screenId === "settingsScreen") {
+        renderSettings();
+    }
+}
+
+function showHome() {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById("homeScreen").style.display = "block";
+}
+
+/* =========================================================
+   DOM Ready
+========================================================= */
+window.addEventListener("load", async () => {
+
+    // Render MM server list once
+    renderMMServers();
+
+    // Start with random background video (prefer cached blob)
+    await playRandomVideo();
+
+    // Kick off background download for all videos (non-blocking)
+    setTimeout(() => { cacheAllVideos(); }, 800);
+
+    // First tap listener -- Intro
+    document.addEventListener("touchstart", handleFirstTap, { once: true });
+    document.addEventListener("click",      handleFirstTap, { once: true });
+});</script>
