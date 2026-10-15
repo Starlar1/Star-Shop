@@ -20,11 +20,13 @@
 
 <body>
 
-<!-- BACKGROUND VIDEO -->
-<video id="backgroundVideo" autoplay muted loop playsinline preload="auto"></video>
+<!-- ===== DOUBLE VIDEO FOR CROSSFADE ===== -->
+<video id="bgVideoA" class="bgVideo active" autoplay muted playsinline preload="auto"></video>
+<video id="bgVideoB" class="bgVideo" muted playsinline preload="auto"></video>
+
 <div class="videoOverlay"></div>
 
-<!-- HOME SCREEN -->
+<!-- ===== HOME SCREEN ===== -->
 <div id="homeScreen">
 
     <div class="heartBalance">
@@ -64,9 +66,21 @@
             </button>
         </div>
     </div>
+
+    <!-- ===== CHAT BUBBLE OVERLAY ===== -->
+    <div id="chatBubble" class="chat-bubble hidden">
+        <div class="bubble-content">
+            <div class="bubble-text" id="bubbleText"></div>
+            <div class="bubble-actions">
+                <button class="bubble-btn secondary" onclick="bubbleBack()">Back</button>
+                <button class="bubble-btn primary" onclick="bubbleBuy()">ဝယ်ယူမည်</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
-<!-- HOME SCREEN (NEW) -->
+<!-- ===== OTHER SCREENS ===== -->
 <div id="homeNewScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
@@ -74,12 +88,9 @@
         </button>
         <div class="screenTitle">Home</div>
     </div>
-    <div class="screenBody">
-        <div class="emptyArea"></div>
-    </div>
+    <div class="screenBody"><div class="emptyArea"></div></div>
 </div>
 
-<!-- BUY SCREEN (All MM Server Items) -->
 <div id="diamondsScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
@@ -87,12 +98,9 @@
         </button>
         <div class="screenTitle">ဝယ်ယူမည်</div>
     </div>
-    <div class="screenBody" id="diamondsBody">
-        <!-- Sections will be injected by JS -->
-    </div>
+    <div class="screenBody" id="diamondsBody"></div>
 </div>
 
-<!-- CHAT SCREEN -->
 <div id="chatScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
@@ -100,12 +108,9 @@
         </button>
         <div class="screenTitle">Chat</div>
     </div>
-    <div class="screenBody">
-        <div class="emptyArea"></div>
-    </div>
+    <div class="screenBody"><div class="emptyArea"></div></div>
 </div>
 
-<!-- HISTORY SCREEN -->
 <div id="historyScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
@@ -113,12 +118,9 @@
         </button>
         <div class="screenTitle">မှတ်တမ်း</div>
     </div>
-    <div class="screenBody">
-        <div class="emptyArea"></div>
-    </div>
+    <div class="screenBody"><div class="emptyArea"></div></div>
 </div>
 
-<!-- FAQ SCREEN -->
 <div id="faqScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
@@ -126,12 +128,9 @@
         </button>
         <div class="screenTitle">FAQ</div>
     </div>
-    <div class="screenBody">
-        <div class="emptyArea"></div>
-    </div>
+    <div class="screenBody"><div class="emptyArea"></div></div>
 </div>
 
-<!-- SETTINGS SCREEN -->
 <div id="settingsScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
@@ -139,8 +138,76 @@
         </button>
         <div class="screenTitle">Setting</div>
     </div>
-    <div class="screenBody" id="settingsBody">
-        <!-- Settings content will be injected by JS -->
+    <div class="screenBody" id="settingsBody"></div>
+</div>
+
+<!-- ===== ORDER POPUP ===== -->
+<div id="orderPopup" class="order-popup hidden">
+    <div class="popup-content">
+
+        <div class="popup-header">
+            <div class="popup-title">ဝယ်ယူမည်</div>
+            <button class="popup-close" onclick="closeOrderPopup()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="popup-body">
+
+            <div class="popup-item">
+                <i class="fa-solid fa-gem"></i>
+                <span id="popupItemName">-</span>
+            </div>
+
+            <div class="popup-price" id="popupItemPrice">-</div>
+
+            <div class="payment-info" onclick="copyText('09999999999')">
+                <i class="fa-solid fa-copy"></i>
+                <div>
+                    <div class="pay-name">Wave Money</div>
+                    <div class="pay-num">09999999999</div>
+                </div>
+            </div>
+
+            <div class="payment-info" onclick="copyText('09888888888')">
+                <i class="fa-solid fa-copy"></i>
+                <div>
+                    <div class="pay-name">Kpay</div>
+                    <div class="pay-num">09888888888</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-user"></i> Game ID</label>
+                <input type="text" id="inputGameId" placeholder="Game ID ထည့်ပါ" />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-server"></i> Server ID</label>
+                <input type="text" id="inputServerId" placeholder="Server ID ထည့်ပါ" />
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-camera"></i> ငွေလွဲအတည်ပြုဓာတ်ပုံ</label>
+                <div class="upload-area" id="uploadArea" onclick="document.getElementById('inputImage').click()">
+                    <i class="fa-solid fa-image"></i>
+                    <p>ပုံထည့်ရန် နှိပ်ပါ</p>
+                </div>
+                <input type="file" id="inputImage" accept="image/*" hidden />
+                <div id="imagePreview" class="image-preview hidden">
+                    <img id="previewImg" src="" alt="preview">
+                    <button class="remove-img" onclick="removeImage()">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitOrder()">
+                <i class="fa-solid fa-paper-plane"></i>
+                <span>ပေးပို့မည်</span>
+            </button>
+
+        </div>
     </div>
 </div>
 
@@ -166,22 +233,27 @@ html, body {
 }
 
 /* =========================================================
-   BACKGROUND VIDEO
+   DOUBLE VIDEO
 ========================================================= */
-#backgroundVideo {
+.bgVideo {
     position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     z-index: 0;
-    background: #000;
+    background: transparent;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
 }
+
+.bgVideo.active { opacity: 1; z-index: 1; }
 
 .videoOverlay {
     position: fixed;
     inset: 0;
-    z-index: 1;
+    z-index: 2;
     pointer-events: none;
     background: linear-gradient(
         180deg,
@@ -200,9 +272,6 @@ html, body {
     z-index: 5;
 }
 
-/* =========================================================
-   HEART BALANCE
-========================================================= */
 .heartBalance {
     position: absolute;
     top: 18px;
@@ -223,21 +292,9 @@ html, body {
     z-index: 20;
 }
 
-.heartBalance i {
-    color: #ff6684;
-    font-size: 14px;
-    filter: drop-shadow(0 0 8px rgba(255,80,115,0.50));
-}
+.heartBalance i { color: #ff6684; font-size: 14px; }
+.heartBalance span { color: #fff; font-size: 11px; font-weight: 700; }
 
-.heartBalance span {
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-/* =========================================================
-   SETTING
-========================================================= */
 .homeTop {
     position: absolute;
     top: 18px;
@@ -265,9 +322,6 @@ html, body {
 
 .settingButton:active { transform: scale(.92); }
 
-/* =========================================================
-   HOME CONTENT
-========================================================= */
 .homeContent {
     position: absolute;
     left: 0;
@@ -279,9 +333,6 @@ html, body {
     gap: 8px;
 }
 
-/* =========================================================
-   BUY BUTTON
-========================================================= */
 .buyButton {
     position: relative;
     width: 240px;
@@ -308,10 +359,8 @@ html, body {
 .buyButton::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: -110%;
-    width: 60%;
-    height: 100%;
+    top: 0; left: -110%;
+    width: 60%; height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.17), transparent);
     transform: skewX(-20deg);
     animation: buyShine 5s infinite;
@@ -326,9 +375,6 @@ html, body {
 .buyButton i { font-size: 11px; }
 .buyButton:active { transform: scale(.95); }
 
-/* =========================================================
-   NAVIGATION
-========================================================= */
 .bottomMenu {
     width: 86vw;
     max-width: 350px;
@@ -375,6 +421,92 @@ html, body {
 .menuButton:active { transform: scale(.91); }
 
 /* =========================================================
+   CHAT BUBBLE
+========================================================= */
+.chat-bubble {
+    position: fixed;
+    left: 50%;
+    bottom: 140px;
+    transform: translateX(-50%);
+    z-index: 30;
+    width: 86vw;
+    max-width: 340px;
+    animation: bubbleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.chat-bubble.hidden { display: none; }
+
+@keyframes bubbleIn {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.9); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+.bubble-content {
+    background: linear-gradient(135deg, rgba(255,142,170,0.30), rgba(255,107,145,0.20));
+    border: 1px solid rgba(255,142,170,0.50);
+    border-radius: 20px;
+    padding: 16px 18px;
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    box-shadow: 0 12px 40px rgba(255,75,120,0.30), inset 0 1px 0 rgba(255,255,255,0.20);
+    position: relative;
+}
+
+.bubble-content::after {
+    content: "";
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 12px solid rgba(255,142,170,0.30);
+}
+
+.bubble-text {
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.5;
+    text-align: center;
+    margin-bottom: 12px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.30);
+}
+
+.bubble-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.bubble-btn {
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: none;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.bubble-btn.secondary {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+}
+
+.bubble-btn.primary {
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(255,75,120,0.40);
+}
+
+.bubble-btn:active { transform: scale(.94); }
+
+/* =========================================================
    ALL SCREENS
 ========================================================= */
 .screen {
@@ -390,9 +522,6 @@ html, body {
 
 .screen.active { display: flex; }
 
-/* =========================================================
-   SCREEN HEADER
-========================================================= */
 .screenHeader {
     width: 100%;
     min-height: 62px;
@@ -401,7 +530,6 @@ html, body {
     align-items: center;
     background: rgba(255,255,255,0.045);
     border-bottom: 1px solid rgba(255,255,255,0.10);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     flex-shrink: 0;
 }
 
@@ -428,43 +556,20 @@ html, body {
     font-weight: 700;
 }
 
-/* =========================================================
-   SCREEN BODY (Scroll Enabled)
-========================================================= */
 .screenBody {
     flex: 1;
     width: 100%;
     padding: 18px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.30) transparent;
 }
 
-.screenBody::-webkit-scrollbar {
-    width: 5px;
-}
-
-.screenBody::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.screenBody::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.25);
-    border-radius: 3px;
-}
-
-.emptyArea {
-    width: 100%;
-    min-height: 100%;
-}
+.emptyArea { width: 100%; min-height: 100%; }
 
 /* =========================================================
-   SECTION TITLES
+   SECTION / GRID
 ========================================================= */
-.mm-section {
-    margin-bottom: 22px;
-}
+.mm-section { margin-bottom: 22px; }
 
 .mm-section-title {
     display: flex;
@@ -472,26 +577,19 @@ html, body {
     gap: 8px;
     font-size: 13px;
     font-weight: 700;
-    color: #fff;
     padding: 10px 14px;
     margin-bottom: 12px;
     border-radius: 12px;
     background: linear-gradient(135deg, rgba(255,142,170,0.20), rgba(255,107,145,0.10));
     border: 1px solid rgba(255,142,170,0.30);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     box-shadow: 0 4px 15px rgba(255,107,145,0.10);
 }
 
 .mm-section-title i {
     color: #ff8eaa;
     font-size: 14px;
-    filter: drop-shadow(0 0 6px rgba(255,107,145,0.50));
 }
 
-/* =========================================================
-   MM SERVER GRID (3 columns)
-========================================================= */
 .mm-grid-3 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -507,14 +605,10 @@ html, body {
     display: flex;
     flex-direction: column;
     cursor: pointer;
-    transition: transform .2s, box-shadow .2s;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    transition: transform .2s;
 }
 
-.mm-card:active {
-    transform: scale(.95);
-}
+.mm-card:active { transform: scale(.95); }
 
 .mm-card img {
     width: 100%;
@@ -549,7 +643,7 @@ html, body {
 }
 
 /* =========================================================
-   SETTINGS UI
+   SETTINGS
 ========================================================= */
 .settings-card {
     background: rgba(255,255,255,0.06);
@@ -557,8 +651,6 @@ html, body {
     border-radius: 14px;
     padding: 16px;
     margin-bottom: 14px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
 }
 
 .settings-card-title {
@@ -567,14 +659,10 @@ html, body {
     gap: 8px;
     font-size: 13px;
     font-weight: 700;
-    color: #fff;
     margin-bottom: 12px;
 }
 
-.settings-card-title i {
-    color: #ff8eaa;
-    font-size: 14px;
-}
+.settings-card-title i { color: #ff8eaa; font-size: 14px; }
 
 .settings-row {
     display: flex;
@@ -586,9 +674,7 @@ html, body {
     border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
-.settings-row:last-child {
-    border-bottom: none;
-}
+.settings-row:last-child { border-bottom: none; }
 
 .settings-row .label {
     display: flex;
@@ -636,54 +722,312 @@ html, body {
     color: #ff8888;
 }
 
-.settings-button:active {
+.settings-button:active { transform: scale(.97); }
+
+/* =========================================================
+   ORDER POPUP
+========================================================= */
+.order-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.80);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 18px;
+    animation: fadeIn 0.3s ease;
+}
+
+.order-popup.hidden { display: none; }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.popup-content {
+    width: 100%;
+    max-width: 400px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #1a1a22, #0a0a10);
+    border: 1px solid rgba(255,255,255,0.10);
+    box-shadow: 0 25px 60px rgba(0,0,0,0.55);
+    animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+}
+
+.popup-header {
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.popup-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.popup-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.20);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+}
+
+.popup-close:active { transform: rotate(90deg) scale(.92); }
+
+.popup-body {
+    padding: 18px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    flex: 1;
+}
+
+.popup-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(255,142,170,0.10);
+    border: 1px solid rgba(255,142,170,0.25);
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.popup-item i { color: #ff8eaa; }
+
+.popup-price {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ff8eaa;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.10);
+    margin-bottom: 14px;
+}
+
+.payment-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: transform .2s, background .2s;
+}
+
+.payment-info:active {
     transform: scale(.97);
+    background: rgba(255,142,170,0.15);
+}
+
+.payment-info i {
+    color: #ff8eaa;
+    font-size: 16px;
+    width: 20px;
+}
+
+.pay-name {
+    font-size: 10px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 2px;
+}
+
+.pay-num {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.form-group {
+    margin-top: 14px;
+}
+
+.form-group label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 7px;
+}
+
+.form-group label i { color: #ff8eaa; }
+
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    transition: border .2s;
+}
+
+.form-group input[type="text"]:focus {
+    border-color: #ff8eaa;
+}
+
+.upload-area {
+    padding: 22px;
+    border-radius: 12px;
+    border: 2px dashed rgba(255,142,170,0.40);
+    background: rgba(255,142,170,0.06);
+    text-align: center;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.upload-area:active { background: rgba(255,142,170,0.15); }
+
+.upload-area i {
+    font-size: 26px;
+    color: #ff8eaa;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.upload-area p {
+    font-size: 11px;
+    color: rgba(255,255,255,0.75);
+}
+
+.image-preview {
+    position: relative;
+    margin-top: 10px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+.image-preview.hidden { display: none; }
+
+.image-preview img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.remove-img {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.65);
+    color: #fff;
+    cursor: pointer;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    margin-top: 18px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    color: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    box-shadow: 0 10px 30px rgba(255,75,120,0.35);
+    transition: transform .2s;
+}
+
+.submit-btn:active { transform: scale(.97); }
+
+.submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(0,0,0,0.90);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 25px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 200;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,142,170,0.40);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 /* =========================================================
    MOBILE
 ========================================================= */
 @media (max-width: 600px) {
-
-    .heartBalance {
-        top: 17px;
-        left: 16px;
-        height: 36px;
-        min-width: 64px;
-        padding: 0 10px;
-        gap: 6px;
-    }
-
+    .heartBalance { top: 17px; left: 16px; height: 36px; min-width: 64px; padding: 0 10px; gap: 6px; }
     .heartBalance i { font-size: 13px; }
     .heartBalance span { font-size: 10px; }
-
     .homeTop { top: 16px; right: 16px; }
-
     .homeContent { bottom: 74px; gap: 7px; }
-
-    .buyButton {
-        width: 240px;
-        height: 41px;
-        border-radius: 13px;
-        font-size: 10px;
-    }
-
-    .bottomMenu {
-        width: 86vw;
-        height: 46px;
-        padding: 3px;
-        gap: 2px;
-        border-radius: 15px;
-    }
-
-    .menuButton {
-        height: 38px;
-        border-radius: 10px;
-        font-size: 6.5px;
-    }
-
+    .buyButton { width: 240px; height: 41px; font-size: 10px; }
+    .bottomMenu { width: 86vw; height: 46px; }
+    .menuButton { height: 38px; font-size: 6.5px; }
     .menuButton i { font-size: 11px; }
-
     .mm-grid-3 { gap: 8px; }
     .mm-card-name { font-size: 8px; }
     .mm-card-price { font-size: 8px; }
@@ -691,6 +1035,7 @@ html, body {
    VIDEO SOURCES
 ========================================================= */
 
+// ကျပန်း Background VD ၄ ခု (စစဝင်ချင်း)
 const RANDOM_VIDEOS = [
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_140553562.mp4",
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_140338500.mp4",
@@ -698,243 +1043,291 @@ const RANDOM_VIDEOS = [
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_135833179.mp4"
 ];
 
+// ⭐ အသစ် -- နှိပ်ရင် ပြောင်းတဲ့ Intro VD
 const INTRO_VIDEO =
-    "https://raw.githubusercontent.com/Starlar1/Star-Shop/882df19393b5af7c09e7a75e2dc3068cc9cdfad2/InShot_20261013_135055675.mp4";
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/aab91f85b33618517ee37fbe75ee243ed661e27e/InShot_20261015_135149927.mp4";
 
+// ⭐ အသစ် -- အမြဲ ထပ်ခါထပ်ခါ ပြမဲ့ Loop VD
 const LOOP_VIDEO =
-    "https://raw.githubusercontent.com/Starlar1/Star-Shop/dc81bbbb2c63756cbe88a4bba4059e28d4acafb6/InShot_20261013_141016478.mp4";
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/17932436965a54526febf6b948ae9df4f3111672/InShot_20261015_135123172.mp4";
 
-const ALL_VIDEO_URLS = [...RANDOM_VIDEOS, INTRO_VIDEO, LOOP_VIDEO];
+// Item အလိုက် Video (Item နှိပ်ရင် ပြောင်းမည့် VD)
+const ITEM_VIDEOS = {
+    "Weekly Pass":
+        "https://raw.githubusercontent.com/Starlar1/Star-Shop/5590bda45ea9870817c0db14afb60114620eaa22/InShot_20261013_135523666.mp4",
+
+    "14-514":
+        "https://raw.githubusercontent.com/Starlar1/Star-Shop/abd87741250f21cc5e8b64f1dad435e7d9f7d44e/InShot_20261013_135401666.mp4",
+
+    "600-1049":
+        "https://raw.githubusercontent.com/Starlar1/Star-Shop/95e3483d6adbb6fd3f4c1a821cf630d21baa3992/InShot_20261013_135611884.mp4",
+
+    "1135-9288":
+        "https://raw.githubusercontent.com/Starlar1/Star-Shop/bb8d4ede6aaa5836fa9ce1d312d71dc08b7e294d/InShot_20261013_140704688.mp4",
+
+    "plus":
+        "https://raw.githubusercontent.com/Starlar1/Star-Shop/d5cc5477fa3ab299e3568b27de0c33f598c27f57/InShot_20261013_135452044.mp4"
+};
+
+// ၀ယ်ယူမည် နှိပ်ရင် ပြောင်းမည့် အသစ် VD
+const BUY_VIDEO =
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/17932436965a54526febf6b948ae9df4f3111672/InShot_20261015_135123172.mp4";
+
+const ALL_VIDEO_URLS = [
+    ...RANDOM_VIDEOS,
+    INTRO_VIDEO,
+    LOOP_VIDEO,
+    ...Object.values(ITEM_VIDEOS),
+    BUY_VIDEO
+];
 
 /* =========================================================
-   MM SERVER DATA (Sections)
+   TELEGRAM CONFIG
 ========================================================= */
+const BOT_TOKEN = "8094270595:AAERziCUrOYf38DMOSReu1oOSEf2LLG_qS0";
+const GROUP_ID  = "@StarlarShopCom";
 
+/* =========================================================
+   MM SERVER DATA
+========================================================= */
 const MM_PASSES = [
-    { name: "Weekly Pass", price: "6,600 Ks", image: "https://i.ibb.co/cK8h3WvH/Grid-Art-20251216-174338901.jpg" },
-    { name: "Miya Twilight Pass", price: "35,000 Ks", image: "https://i.ibb.co/ycM9HS3s/Grid-Art-20251229-175041122.jpg" }
+    { name: "Weekly Pass", price: "6,600 Ks", image: "https://i.ibb.co/cK8h3WvH/Grid-Art-20251216-174338901.jpg", key: "Weekly Pass" }
 ];
 
 const MM_2X = [
-    { name: "50+50 Diamonds", price: "3,500 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg" },
-    { name: "150+150 Diamonds", price: "10,300 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
-    { name: "250+250 Diamonds", price: "16,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg" },
-    { name: "500+500 Diamonds", price: "33,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg" }
+    { name: "50+50 Diamonds", price: "3,500 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg", key: "plus" },
+    { name: "150+150 Diamonds", price: "10,300 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "plus" },
+    { name: "250+250 Diamonds", price: "16,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "plus" },
+    { name: "500+500 Diamonds", price: "33,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "plus" }
 ];
 
 const MM_ALL_DIAMONDS = [
-    { name: "14 Diamonds", price: "1,400 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
-    { name: "28 Diamonds", price: "2,500 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
-    { name: "42 Diamonds", price: "3,800 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
-    { name: "55 Diamonds", price: "4,700 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
-    { name: "86 Diamonds", price: "5,600 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg" },
-    { name: "112 Diamonds", price: "7,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "172 Diamonds", price: "10,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "257 Diamonds", price: "15,700 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "343 Diamonds", price: "20,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "429 Diamonds", price: "26,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "514 Diamonds", price: "30,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "600 Diamonds", price: "36,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "706 Diamonds", price: "41,500 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "878 Diamonds", price: "51,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "963 Diamonds", price: "56,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg" },
-    { name: "1049 Diamonds", price: "62,700 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
-    { name: "1135 Diamonds", price: "67,500 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
-    { name: "1412 Diamonds", price: "83,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg" },
-    { name: "2195 Diamonds", price: "125,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg" },
-    { name: "2901 Diamonds", price: "166,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg" },
-    { name: "3688 Diamonds", price: "209,500 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg" },
-    { name: "5532 Diamonds", price: "315,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg" },
-    { name: "9288 Diamonds", price: "520,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg" }
+    { name: "14 Diamonds", price: "1,400 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
+    { name: "28 Diamonds", price: "2,500 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
+    { name: "42 Diamonds", price: "3,800 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
+    { name: "55 Diamonds", price: "4,700 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
+    { name: "86 Diamonds", price: "5,600 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
+    { name: "112 Diamonds", price: "7,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "172 Diamonds", price: "10,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "257 Diamonds", price: "15,700 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "343 Diamonds", price: "20,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "429 Diamonds", price: "26,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "514 Diamonds", price: "30,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "600 Diamonds", price: "36,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "706 Diamonds", price: "41,500 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "878 Diamonds", price: "51,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "963 Diamonds", price: "56,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "1049 Diamonds", price: "62,700 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "600-1049" },
+    { name: "1135 Diamonds", price: "67,500 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1135-9288" },
+    { name: "1412 Diamonds", price: "83,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1135-9288" },
+    { name: "2195 Diamonds", price: "125,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "2901 Diamonds", price: "166,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "3688 Diamonds", price: "209,500 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "5532 Diamonds", price: "315,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "9288 Diamonds", price: "520,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" }
 ];
 
 /* =========================================================
    ELEMENTS
 ========================================================= */
-const video = document.getElementById("backgroundVideo");
+const videoA = document.getElementById("bgVideoA");
+const videoB = document.getElementById("bgVideoB");
 
 /* =========================================================
    STATE
 ========================================================= */
-let introPlayed = false;
-let tapLocked   = true;
+let introPlayed  = false;
+let tapLocked    = true;
+let currentURL   = null;
+let selectedItem = null;
+let uploadedImage = null;
 
 /* =========================================================
-   INDEXEDDB SETUP
+   INDEXEDDB
 ========================================================= */
 const DB_NAME    = "StarShopDB";
 const DB_VERSION = 1;
-const STORE_NAME = "videos";
-
+const STORE_NAME = "resources";
 let dbInstance = null;
 
 function openDB() {
     return new Promise((resolve, reject) => {
-        if (dbInstance) {
-            return resolve(dbInstance);
-        }
-
+        if (dbInstance) return resolve(dbInstance);
         const request = indexedDB.open(DB_NAME, DB_VERSION);
-
-        request.onupgradeneeded = (event) => {
-            const db = event.target.result;
+        request.onupgradeneeded = (e) => {
+            const db = e.target.result;
             if (!db.objectStoreNames.contains(STORE_NAME)) {
                 db.createObjectStore(STORE_NAME, { keyPath: "url" });
             }
         };
-
-        request.onsuccess = (event) => {
-            dbInstance = event.target.result;
-            resolve(dbInstance);
-        };
-
-        request.onerror = (event) => {
-            reject(event.target.error);
-        };
+        request.onsuccess = (e) => { dbInstance = e.target.result; resolve(dbInstance); };
+        request.onerror   = (e) => reject(e.target.error);
     });
 }
 
-/* Get single video blob from DB */
-async function getVideoFromDB(url) {
+async function getResourceFromDB(url) {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
             const tx = db.transaction(STORE_NAME, "readonly");
-            const store = tx.objectStore(STORE_NAME);
-            const req = store.get(url);
-
+            const req = tx.objectStore(STORE_NAME).get(url);
             req.onsuccess = () => resolve(req.result || null);
             req.onerror   = () => reject(req.error);
         });
-    } catch (e) {
-        console.warn("getVideoFromDB error:", e);
-        return null;
-    }
+    } catch (e) { return null; }
 }
 
-/* Save video blob to DB */
-async function saveVideoToDB(url, blob) {
+async function saveResourceToDB(url, blob) {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
             const tx = db.transaction(STORE_NAME, "readwrite");
-            const store = tx.objectStore(STORE_NAME);
-            const req = store.put({
-                url: url,
-                blob: blob,
-                size: blob.size,
-                savedAt: Date.now()
+            const req = tx.objectStore(STORE_NAME).put({
+                url, blob, size: blob.size, savedAt: Date.now()
             });
-
             req.onsuccess = () => resolve(true);
             req.onerror   = () => reject(req.error);
         });
-    } catch (e) {
-        console.warn("saveVideoToDB error:", e);
-        return false;
-    }
+    } catch (e) { return false; }
 }
 
-/* Get all cached video records */
-async function getAllVideosFromDB() {
+async function getAllResourcesFromDB() {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
             const tx = db.transaction(STORE_NAME, "readonly");
-            const store = tx.objectStore(STORE_NAME);
-            const req = store.getAll();
-
+            const req = tx.objectStore(STORE_NAME).getAll();
             req.onsuccess = () => resolve(req.result || []);
             req.onerror   = () => reject(req.error);
         });
-    } catch (e) {
-        console.warn("getAllVideosFromDB error:", e);
-        return [];
-    }
+    } catch (e) { return []; }
 }
 
-/* Clear all cached videos */
-async function clearAllVideosFromDB() {
+async function clearAllResourcesFromDB() {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
             const tx = db.transaction(STORE_NAME, "readwrite");
-            const store = tx.objectStore(STORE_NAME);
-            const req = store.clear();
-
+            const req = tx.objectStore(STORE_NAME).clear();
             req.onsuccess = () => resolve(true);
             req.onerror   = () => reject(req.error);
         });
-    } catch (e) {
-        console.warn("clearAllVideosFromDB error:", e);
-        return false;
-    }
+    } catch (e) { return false; }
 }
 
 /* =========================================================
-   VIDEO CACHE MANAGER
+   RESOURCE CACHE
 ========================================================= */
+const resourceCache = {};
 
-/* videoCache: { url: blobURL } */
-const videoCache = {};
-
-/* Setup src of video -- Prefer Blob URL from cache */
-async function setVideoSource(url, { loop = true } = {}) {
-    let src = url;
-
-    // 1. In-memory cache
-    if (videoCache[url]) {
-        src = videoCache[url];
-    } else {
-        // 2. IndexedDB
-        const record = await getVideoFromDB(url);
-        if (record && record.blob) {
-            const blobURL = URL.createObjectURL(record.blob);
-            videoCache[url] = blobURL;
-            src = blobURL;
-        }
+async function getResourceBlobURL(url) {
+    if (resourceCache[url]) return resourceCache[url];
+    const record = await getResourceFromDB(url);
+    if (record && record.blob) {
+        const blobURL = URL.createObjectURL(record.blob);
+        resourceCache[url] = blobURL;
+        return blobURL;
     }
-
-    video.loop = loop;
-    video.src  = src;
-    video.muted = true;
-    video.load();
-    video.play().catch(() => {});
+    return url;
 }
 
-/* Download all videos (in background) and cache them */
-async function cacheAllVideos() {
+/* =========================================================
+   CROSSFADE PLAYER
+========================================================= */
+let currentVideo = videoA;
+let standbyVideo = videoB;
+
+async function crossfadeTo(url, { loop = true } = {}) {
+    if (currentURL === url) return;
+
+    const blobURL = await getResourceBlobURL(url);
+
+    standbyVideo.loop = loop;
+    standbyVideo.src = blobURL;
+    standbyVideo.currentTime = 0;
+    standbyVideo.load();
+
+    await new Promise((resolve) => {
+        const onReady = () => {
+            standbyVideo.removeEventListener("canplay", onReady);
+            resolve();
+        };
+        if (standbyVideo.readyState >= 3) resolve();
+        else {
+            standbyVideo.addEventListener("canplay", onReady);
+            setTimeout(resolve, 1500);
+        }
+    });
+
+    try { await standbyVideo.play(); } catch (e) {}
+
+    standbyVideo.classList.add("active");
+    currentVideo.classList.remove("active");
+
+    setTimeout(() => {
+        try { currentVideo.pause(); } catch (e) {}
+        const tmp = currentVideo;
+        currentVideo = standbyVideo;
+        standbyVideo = tmp;
+        currentURL = url;
+    }, 400);
+}
+
+/* =========================================================
+   VIDEO FLOW
+========================================================= */
+async function playRandomVideo() {
+    const idx = Math.floor(Math.random() * RANDOM_VIDEOS.length);
+    await crossfadeTo(RANDOM_VIDEOS[idx], { loop: true });
+}
+
+async function handleFirstTap() {
+    if (introPlayed) return;
+    introPlayed = true;
+
+    await crossfadeTo(INTRO_VIDEO, { loop: false });
+
+    currentVideo.onended = async () => {
+        await crossfadeTo(LOOP_VIDEO, { loop: true });
+        tapLocked = false;
+    };
+
+    setTimeout(() => {
+        if (tapLocked) {
+            tapLocked = false;
+            crossfadeTo(LOOP_VIDEO, { loop: true });
+        }
+    }, 15000);
+}
+
+/* =========================================================
+   DOWNLOAD ALL RESOURCES
+========================================================= */
+async function cacheAllResources() {
     for (const url of ALL_VIDEO_URLS) {
         try {
-            // Skip if already in DB
-            const existing = await getVideoFromDB(url);
+            const existing = await getResourceFromDB(url);
             if (existing && existing.blob) {
-                const blobURL = URL.createObjectURL(existing.blob);
-                videoCache[url] = blobURL;
+                if (!resourceCache[url]) {
+                    resourceCache[url] = URL.createObjectURL(existing.blob);
+                }
                 continue;
             }
-
-            // Fetch and store
             const response = await fetch(url, { mode: "cors" });
             if (!response.ok) continue;
             const blob = await response.blob();
-            await saveVideoToDB(url, blob);
-
-            const blobURL = URL.createObjectURL(blob);
-            videoCache[url] = blobURL;
-
-        } catch (e) {
-            console.warn("Failed to cache video:", url, e);
-        }
+            await saveResourceToDB(url, blob);
+            resourceCache[url] = URL.createObjectURL(blob);
+        } catch (e) {}
     }
 }
 
 /* =========================================================
-   RENDER MM SERVER LIST (Sections)
+   MM SERVER LIST RENDER
 ========================================================= */
 function createCardHTML(item) {
     return `
-        <div class="mm-card">
+        <div class="mm-card" onclick="selectItem('${item.key}', '${item.name}', '${item.price}')">
             <img src="${item.image}" alt="${item.name}" loading="lazy">
             <div class="mm-card-info">
                 <div class="mm-card-name">${item.name}</div>
@@ -945,6 +1338,7 @@ function createCardHTML(item) {
 }
 
 function renderSection(title, icon, items) {
+    if (items.length === 0) return "";
     let html = `
         <div class="mm-section">
             <div class="mm-section-title">
@@ -961,13 +1355,240 @@ function renderSection(title, icon, items) {
 function renderMMServers() {
     const body = document.getElementById("diamondsBody");
     if (!body) return;
-
     let html = "";
     html += renderSection("Pass", "fa-solid fa-star", MM_PASSES);
     html += renderSection("2x Diamonds", "fa-solid fa-gift", MM_2X);
     html += renderSection("All Diamonds", "fa-solid fa-gem", MM_ALL_DIAMONDS);
-
     body.innerHTML = html;
+}
+
+/* =========================================================
+   ITEM SELECT → Home + Bubble + Video
+========================================================= */
+async function selectItem(key, name, price) {
+    selectedItem = { key, name, price };
+
+    // Hide all screens, show Home
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById("homeScreen").style.display = "block";
+
+    // Change background video per item
+    const videoURL = ITEM_VIDEOS[key] || LOOP_VIDEO;
+    await crossfadeTo(videoURL, { loop: true });
+
+    // Show bubble
+    const bubble = document.getElementById("chatBubble");
+    const text = document.getElementById("bubbleText");
+    text.innerHTML = `
+        <div style="font-size:13px;font-weight:800;margin-bottom:6px;">${name}</div>
+        <div style="font-size:11px;color:#ffd0dc;font-weight:600;">${price}</div>
+        <div style="font-size:10px;margin-top:8px;color:#fff;">ဝယ်ယူလိုပါသလား?</div>
+    `;
+    bubble.classList.remove("hidden");
+
+    // Hide buy button + bottom nav
+    document.querySelector(".buyButton").style.display = "none";
+    document.querySelector(".bottomMenu").style.display = "none";
+}
+
+/* =========================================================
+   BUBBLE ACTIONS
+========================================================= */
+function bubbleBack() {
+    // Hide bubble, restore buttons
+    document.getElementById("chatBubble").classList.add("hidden");
+    document.querySelector(".buyButton").style.display = "flex";
+    document.querySelector(".bottomMenu").style.display = "grid";
+
+    // Back to loop video
+    crossfadeTo(LOOP_VIDEO, { loop: true });
+
+    selectedItem = null;
+}
+
+async function bubbleBuy() {
+    // Hide bubble
+    document.getElementById("chatBubble").classList.add("hidden");
+
+    // Change video
+    await crossfadeTo(BUY_VIDEO, { loop: true });
+
+    // Show order popup after short delay
+    setTimeout(() => {
+        openOrderPopup();
+    }, 400);
+}
+
+/* =========================================================
+   ORDER POPUP
+========================================================= */
+function openOrderPopup() {
+    if (!selectedItem) return;
+
+    document.getElementById("popupItemName").textContent  = selectedItem.name;
+    document.getElementById("popupItemPrice").textContent = selectedItem.price;
+    document.getElementById("inputGameId").value = "";
+    document.getElementById("inputServerId").value = "";
+    removeImage();
+
+    document.getElementById("orderPopup").classList.remove("hidden");
+}
+
+function closeOrderPopup() {
+    document.getElementById("orderPopup").classList.add("hidden");
+
+    // Restore home buttons
+    document.querySelector(".buyButton").style.display = "flex";
+    document.querySelector(".bottomMenu").style.display = "grid";
+
+    // Back to loop
+    crossfadeTo(LOOP_VIDEO, { loop: true });
+    selectedItem = null;
+}
+
+/* =========================================================
+   IMAGE UPLOAD
+========================================================= */
+document.getElementById("inputImage").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+        showToast("ပုံအရွယ်အစား 5MB ကျော်လို့မရပါ");
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+        uploadedImage = ev.target.result;
+        document.getElementById("previewImg").src = uploadedImage;
+        document.getElementById("imagePreview").classList.remove("hidden");
+        document.getElementById("uploadArea").style.display = "none";
+    };
+    reader.readAsDataURL(file);
+});
+
+function removeImage() {
+    uploadedImage = null;
+    document.getElementById("imagePreview").classList.add("hidden");
+    document.getElementById("uploadArea").style.display = "block";
+    document.getElementById("inputImage").value = "";
+}
+
+/* =========================================================
+   COPY TO CLIPBOARD
+========================================================= */
+function copyText(text) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast("Copy လုပ်ပြီးပါပြီ -- " + text);
+        }).catch(() => {
+            fallbackCopy(text);
+        });
+    } else {
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try {
+        document.execCommand("copy");
+        showToast("Copy လုပ်ပြီးပါပြီ -- " + text);
+    } catch (e) {
+        showToast("Copy မလုပ်နိုင်ပါ");
+    }
+    document.body.removeChild(ta);
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+function showToast(msg) {
+    let t = document.querySelector(".toast");
+    if (!t) {
+        t = document.createElement("div");
+        t.className = "toast";
+        document.body.appendChild(t);
+    }
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+/* =========================================================
+   SUBMIT ORDER TO TELEGRAM
+========================================================= */
+async function submitOrder() {
+    const gameId   = document.getElementById("inputGameId").value.trim();
+    const serverId = document.getElementById("inputServerId").value.trim();
+
+    if (!gameId)   { showToast("Game ID ထည့်ပါ"); return; }
+    if (!serverId) { showToast("Server ID ထည့်ပါ"); return; }
+    if (!uploadedImage) { showToast("ငွေလွဲအတည်ပြုဓာတ်ပုံ ထည့်ပါ"); return; }
+
+    const btn = document.getElementById("submitBtn");
+    const original = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> ပေးပို့နေသည်...';
+
+    try {
+        const now = new Date();
+        const time12 = now.toLocaleString("en-US", {
+            year: "numeric", month: "short", day: "numeric",
+            hour: "2-digit", minute: "2-digit", hour12: true
+        });
+
+        const caption =
+`🛒 New Order
+
+📦 Item: ${selectedItem.name}
+💰 Price: ${selectedItem.price}
+🎮 Game ID: ${gameId}
+🔢 Server ID: ${serverId}
+🕒 Time: ${time12}`;
+
+        const blob = dataURLtoBlob(uploadedImage);
+        const formData = new FormData();
+        formData.append("chat_id", GROUP_ID);
+        formData.append("photo", blob, "payment.jpg");
+        formData.append("caption", caption);
+
+        const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (data.ok) {
+            showToast("✅ Order အောင်မြင်ပါသည်");
+            setTimeout(() => {
+                closeOrderPopup();
+            }, 1200);
+        } else {
+            showToast("❌ ပေးပို့မှု မအောင်မြင်ပါ");
+        }
+    } catch (e) {
+        showToast("❌ Error -- ထပ်ကြိုးစားပါ");
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = original;
+    }
+}
+
+function dataURLtoBlob(dataURL) {
+    const arr = dataURL.split(",");
+    const mime = arr[0].match(/:(.*?);/)[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8 = new Uint8Array(n);
+    while (n--) u8[n] = bstr.charCodeAt(n);
+    return new Blob([u8], { type: mime });
 }
 
 /* =========================================================
@@ -977,19 +1598,16 @@ async function renderSettings() {
     const body = document.getElementById("settingsBody");
     if (!body) return;
 
-    const cachedRecords = await getAllVideosFromDB();
+    const cachedRecords = await getAllResourcesFromDB();
     const cachedUrls = cachedRecords.map(r => r.url);
 
-    // Calculate size
     let totalSize = 0;
     cachedRecords.forEach(r => { totalSize += (r.size || 0); });
     const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
 
-    // Build rows
     let cachedRows = "";
     ALL_VIDEO_URLS.forEach((url, i) => {
         const isCached = cachedUrls.includes(url);
-        const fileName = url.split("/").pop();
         const statusIcon = isCached
             ? '<i class="fa-solid fa-circle-check" style="color:#6ee7a7;"></i>'
             : '<i class="fa-solid fa-circle-xmark" style="color:#ff8888;"></i>';
@@ -997,13 +1615,8 @@ async function renderSettings() {
 
         cachedRows += `
             <div class="settings-row">
-                <div class="label">
-                    ${statusIcon}
-                    <span>Video ${i + 1}</span>
-                </div>
-                <div class="value" style="font-size:10px;font-weight:600;">
-                    ${statusText}
-                </div>
+                <div class="label">${statusIcon}<span>Resource ${i + 1}</span></div>
+                <div class="value" style="font-size:10px;font-weight:600;">${statusText}</div>
             </div>
         `;
     });
@@ -1016,34 +1629,22 @@ async function renderSettings() {
         <div class="settings-card">
             <div class="settings-card-title">
                 <i class="fa-solid fa-database"></i>
-                <span>IndexedDB Storage</span>
+                <span>Storage Info</span>
             </div>
             <div class="settings-row">
-                <div class="label">
-                    <i class="fa-solid fa-video"></i>
-                    <span>Total Videos</span>
-                </div>
+                <div class="label"><i class="fa-solid fa-layer-group"></i><span>Total Resources</span></div>
                 <div class="value">${totalVideos}</div>
             </div>
             <div class="settings-row">
-                <div class="label">
-                    <i class="fa-solid fa-download"></i>
-                    <span>Downloaded (Cached)</span>
-                </div>
+                <div class="label"><i class="fa-solid fa-download"></i><span>Downloaded</span></div>
                 <div class="value">${cachedCount}</div>
             </div>
             <div class="settings-row">
-                <div class="label">
-                    <i class="fa-solid fa-cloud"></i>
-                    <span>Available (Not Cached)</span>
-                </div>
+                <div class="label"><i class="fa-solid fa-cloud"></i><span>Available</span></div>
                 <div class="value">${availCount}</div>
             </div>
             <div class="settings-row">
-                <div class="label">
-                    <i class="fa-solid fa-hard-drive"></i>
-                    <span>Total Size</span>
-                </div>
+                <div class="label"><i class="fa-solid fa-hard-drive"></i><span>Total Size</span></div>
                 <div class="value">${sizeMB} MB</div>
             </div>
         </div>
@@ -1051,7 +1652,7 @@ async function renderSettings() {
         <div class="settings-card">
             <div class="settings-card-title">
                 <i class="fa-solid fa-list-check"></i>
-                <span>Cached Videos Status</span>
+                <span>Resource Status</span>
             </div>
             ${cachedRows}
         </div>
@@ -1062,83 +1663,46 @@ async function renderSettings() {
                 <span>Actions</span>
             </div>
             <button class="settings-button primary" onclick="manualCacheAll()">
-                <i class="fa-solid fa-cloud-arrow-down"></i>
-                All Data Download
+                <i class="fa-solid fa-cloud-arrow-down"></i> All Data Download
             </button>
             <button class="settings-button danger" onclick="manualClearAll()">
-                <i class="fa-solid fa-trash-can"></i>
-                All Data Clear
+                <i class="fa-solid fa-trash-can"></i> All Data Clear
             </button>
         </div>
     `;
 }
 
-/* Manual cache all */
 async function manualCacheAll() {
-    alert("Downloading all videos...\nPlease wait.");
-    await cacheAllVideos();
-    alert("All videos downloaded and cached!");
+    showToast("Downloading...");
+    await cacheAllResources();
+    showToast("✅ Download ပြီးပါပြီ");
     renderSettings();
 }
 
-/* Manual clear all */
 async function manualClearAll() {
-    if (!confirm("Are you sure you want to clear all cached videos?")) return;
-
-    // Revoke blob URLs
-    Object.values(videoCache).forEach(url => {
+    if (!confirm("Are you sure you want to clear all cached data?")) return;
+    Object.values(resourceCache).forEach(url => {
         try { URL.revokeObjectURL(url); } catch (e) {}
     });
-    Object.keys(videoCache).forEach(k => delete videoCache[k]);
-
-    await clearAllVideosFromDB();
-    alert("All cached data cleared!");
+    Object.keys(resourceCache).forEach(k => delete resourceCache[k]);
+    await clearAllResourcesFromDB();
+    showToast("✅ Clear ပြီးပါပြီ");
     renderSettings();
 }
 
 /* =========================================================
-   VIDEO FLOW
-========================================================= */
-async function playRandomVideo() {
-    const randomIndex = Math.floor(Math.random() * RANDOM_VIDEOS.length);
-    await setVideoSource(RANDOM_VIDEOS[randomIndex], { loop: true });
-}
-
-async function handleFirstTap() {
-    if (introPlayed) return;
-    introPlayed = true;
-
-    // Intro video -- loop false
-    await setVideoSource(INTRO_VIDEO, { loop: false });
-
-    // When intro ends, switch to loop video
-    video.onended = async () => {
-        await setVideoSource(LOOP_VIDEO, { loop: true });
-        tapLocked = false;
-    };
-
-    // Safety fallback: if 'ended' doesn't fire, unlock after 15s
-    setTimeout(() => {
-        if (tapLocked) {
-            tapLocked = false;
-            setVideoSource(LOOP_VIDEO, { loop: true });
-        }
-    }, 15000);
-}
-
-/* =========================================================
-   BUTTON HANDLE (Lock Screen until Intro played)
+   BUTTON / SCREEN HANDLERS
 ========================================================= */
 function handleButtonClick(screenId) {
     if (tapLocked) return;
     showScreen(screenId);
 }
 
-/* =========================================================
-   SHOW SCREEN / HOME
-========================================================= */
 function showScreen(screenId) {
     if (tapLocked) return;
+
+    // Hide bubble if open
+    document.getElementById("chatBubble").classList.add("hidden");
 
     document.getElementById("homeScreen").style.display = "none";
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
@@ -1146,32 +1710,38 @@ function showScreen(screenId) {
     const target = document.getElementById(screenId);
     if (target) target.classList.add("active");
 
-    // If settings, render it
-    if (screenId === "settingsScreen") {
-        renderSettings();
-    }
+    if (screenId === "settingsScreen") renderSettings();
 }
 
 function showHome() {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById("homeScreen").style.display = "block";
+
+    // Restore buy + bottom
+    document.querySelector(".buyButton").style.display = "flex";
+    document.querySelector(".bottomMenu").style.display = "grid";
+
+    // Hide bubble
+    document.getElementById("chatBubble").classList.add("hidden");
+
+    // Back to loop video
+    crossfadeTo(LOOP_VIDEO, { loop: true });
+
+    selectedItem = null;
 }
 
 /* =========================================================
-   DOM Ready
+   INIT
 ========================================================= */
 window.addEventListener("load", async () => {
-
-    // Render MM server list once
+    videoA.classList.add("active");
     renderMMServers();
-
-    // Start with random background video (prefer cached blob)
     await playRandomVideo();
 
-    // Kick off background download for all videos (non-blocking)
-    setTimeout(() => { cacheAllVideos(); }, 800);
+    // Background cache all resources
+    setTimeout(() => { cacheAllResources(); }, 800);
 
-    // First tap listener -- Intro
+    // First tap → Intro
     document.addEventListener("touchstart", handleFirstTap, { once: true });
     document.addEventListener("click",      handleFirstTap, { once: true });
 });</script>
