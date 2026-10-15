@@ -67,7 +67,7 @@
         </div>
     </div>
 
-    <!-- ===== CHAT BUBBLE OVERLAY ===== -->
+    <!-- ===== CHAT BUBBLE ===== -->
     <div id="chatBubble" class="chat-bubble hidden">
         <div class="bubble-content">
             <div class="bubble-text" id="bubbleText"></div>
@@ -458,8 +458,7 @@ html, body {
     bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 0;
-    height: 0;
+    width: 0; height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 12px solid rgba(255,142,170,0.30);
@@ -585,10 +584,7 @@ html, body {
     box-shadow: 0 4px 15px rgba(255,107,145,0.10);
 }
 
-.mm-section-title i {
-    color: #ff8eaa;
-    font-size: 14px;
-}
+.mm-section-title i { color: #ff8eaa; font-size: 14px; }
 
 .mm-grid-3 {
     display: grid;
@@ -870,9 +866,7 @@ html, body {
     color: #fff;
 }
 
-.form-group {
-    margin-top: 14px;
-}
+.form-group { margin-top: 14px; }
 
 .form-group label {
     display: flex;
@@ -982,11 +976,7 @@ html, body {
 }
 
 .submit-btn:active { transform: scale(.97); }
-
-.submit-btn:disabled {
-    opacity: 0.65;
-    cursor: not-allowed;
-}
+.submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
 
 /* =========================================================
    TOAST
@@ -1034,8 +1024,6 @@ html, body {
 }</style><script>/* =========================================================
    VIDEO SOURCES
 ========================================================= */
-
-// ကျပန်း Background VD ၄ ခု (စစဝင်ချင်း)
 const RANDOM_VIDEOS = [
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_140553562.mp4",
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_140338500.mp4",
@@ -1043,35 +1031,26 @@ const RANDOM_VIDEOS = [
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/62828472d279ff60f94c8d4cee104fea4fb4c552/InShot_20261013_135833179.mp4"
 ];
 
-// ⭐ အသစ် -- နှိပ်ရင် ပြောင်းတဲ့ Intro VD
 const INTRO_VIDEO =
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/aab91f85b33618517ee37fbe75ee243ed661e27e/InShot_20261015_135149927.mp4";
 
-// ⭐ အသစ် -- အမြဲ ထပ်ခါထပ်ခါ ပြမဲ့ Loop VD
 const LOOP_VIDEO =
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/17932436965a54526febf6b948ae9df4f3111672/InShot_20261015_135123172.mp4";
 
-// Item အလိုက် Video (Item နှိပ်ရင် ပြောင်းမည့် VD)
 const ITEM_VIDEOS = {
     "Weekly Pass":
         "https://raw.githubusercontent.com/Starlar1/Star-Shop/5590bda45ea9870817c0db14afb60114620eaa22/InShot_20261013_135523666.mp4",
-
     "14-514":
         "https://raw.githubusercontent.com/Starlar1/Star-Shop/abd87741250f21cc5e8b64f1dad435e7d9f7d44e/InShot_20261013_135401666.mp4",
-
     "600-1049":
         "https://raw.githubusercontent.com/Starlar1/Star-Shop/95e3483d6adbb6fd3f4c1a821cf630d21baa3992/InShot_20261013_135611884.mp4",
-
     "1135-9288":
         "https://raw.githubusercontent.com/Starlar1/Star-Shop/bb8d4ede6aaa5836fa9ce1d312d71dc08b7e294d/InShot_20261013_140704688.mp4",
-
     "plus":
         "https://raw.githubusercontent.com/Starlar1/Star-Shop/d5cc5477fa3ab299e3568b27de0c33f598c27f57/InShot_20261013_135452044.mp4"
 };
 
-// ၀ယ်ယူမည် နှိပ်ရင် ပြောင်းမည့် အသစ် VD
-const BUY_VIDEO =
-    "https://raw.githubusercontent.com/Starlar1/Star-Shop/17932436965a54526febf6b948ae9df4f3111672/InShot_20261015_135123172.mp4";
+const BUY_VIDEO = LOOP_VIDEO;
 
 const ALL_VIDEO_URLS = [
     ...RANDOM_VIDEOS,
@@ -1082,7 +1061,7 @@ const ALL_VIDEO_URLS = [
 ];
 
 /* =========================================================
-   TELEGRAM CONFIG
+   TELEGRAM
 ========================================================= */
 const BOT_TOKEN = "8094270595:AAERziCUrOYf38DMOSReu1oOSEf2LLG_qS0";
 const GROUP_ID  = "@StarlarShopCom";
@@ -1128,14 +1107,11 @@ const MM_ALL_DIAMONDS = [
 ];
 
 /* =========================================================
-   ELEMENTS
+   ELEMENTS / STATE
 ========================================================= */
 const videoA = document.getElementById("bgVideoA");
 const videoB = document.getElementById("bgVideoB");
 
-/* =========================================================
-   STATE
-========================================================= */
 let introPlayed  = false;
 let tapLocked    = true;
 let currentURL   = null;
@@ -1248,14 +1224,18 @@ async function crossfadeTo(url, { loop = true } = {}) {
     standbyVideo.load();
 
     await new Promise((resolve) => {
-        const onReady = () => {
-            standbyVideo.removeEventListener("canplay", onReady);
+        let resolved = false;
+        const done = () => {
+            if (resolved) return;
+            resolved = true;
+            standbyVideo.removeEventListener("canplay", done);
             resolve();
         };
-        if (standbyVideo.readyState >= 3) resolve();
+        if (standbyVideo.readyState >= 3) done();
         else {
-            standbyVideo.addEventListener("canplay", onReady);
-            setTimeout(resolve, 1500);
+            standbyVideo.addEventListener("canplay", done);
+            standbyVideo.addEventListener("error", done);
+            setTimeout(done, 1800); // safety
         }
     });
 
@@ -1281,23 +1261,43 @@ async function playRandomVideo() {
     await crossfadeTo(RANDOM_VIDEOS[idx], { loop: true });
 }
 
+/* ⭐ အဓိက ဖြေရှင်းချက် -- Tap ရင် Intro စ + ၅ စက္ကန့်အကြာ Auto Unlock */
 async function handleFirstTap() {
     if (introPlayed) return;
     introPlayed = true;
 
-    await crossfadeTo(INTRO_VIDEO, { loop: false });
+    // 1) ချက်ချင်း Unlock လုပ်လိုက် (Intro ဘယ်လိုဖြစ်ဖြစ် Screen နှိပ်လို့ရအောင်)
+    //    ဒါမှ Intro ဖail ဖြစ်ရင်လည်း ဘာမှ နှိပ်မရတာ မဖြစ်တော့ဘူး
+    setTimeout(() => { tapLocked = false; }, 200);
 
-    currentVideo.onended = async () => {
-        await crossfadeTo(LOOP_VIDEO, { loop: true });
-        tapLocked = false;
-    };
+    try {
+        // 2) Intro Video ကို စမ်း Play
+        const introOk = await crossfadeTo(INTRO_VIDEO, { loop: false });
+        // crossfadeTo က error တင်ရင် catch မှာ ဖမ်းမယ်
 
-    setTimeout(() => {
-        if (tapLocked) {
+        // 3) Intro ပြီးရင် Loop ပြောင်း (loop false ဖြစ်လို့ 'ended' ဖြစ်မယ်)
+        const onEnded = async () => {
+            currentVideo.removeEventListener("ended", onEnded);
+            try {
+                await crossfadeTo(LOOP_VIDEO, { loop: true });
+            } catch (e) {}
             tapLocked = false;
-            crossfadeTo(LOOP_VIDEO, { loop: true });
-        }
-    }, 15000);
+        };
+        currentVideo.addEventListener("ended", onEnded);
+
+        // 4) Safety -- ၁၅ စက္ကန့်အကြာ ဘာမှမဖြစ်လည်း Loop ကို ပြောင်း + Unlock
+        setTimeout(async () => {
+            if (tapLocked) {
+                tapLocked = false;
+                try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
+            }
+        }, 15000);
+
+    } catch (e) {
+        // Intro video မရရင် ချက်ချင်း Loop ပြောင်း + Unlock
+        tapLocked = false;
+        try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (err) {}
+    }
 }
 
 /* =========================================================
@@ -1363,20 +1363,17 @@ function renderMMServers() {
 }
 
 /* =========================================================
-   ITEM SELECT → Home + Bubble + Video
+   ITEM SELECT
 ========================================================= */
 async function selectItem(key, name, price) {
     selectedItem = { key, name, price };
 
-    // Hide all screens, show Home
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById("homeScreen").style.display = "block";
 
-    // Change background video per item
     const videoURL = ITEM_VIDEOS[key] || LOOP_VIDEO;
-    await crossfadeTo(videoURL, { loop: true });
+    try { await crossfadeTo(videoURL, { loop: true }); } catch (e) {}
 
-    // Show bubble
     const bubble = document.getElementById("chatBubble");
     const text = document.getElementById("bubbleText");
     text.innerHTML = `
@@ -1386,7 +1383,6 @@ async function selectItem(key, name, price) {
     `;
     bubble.classList.remove("hidden");
 
-    // Hide buy button + bottom nav
     document.querySelector(".buyButton").style.display = "none";
     document.querySelector(".bottomMenu").style.display = "none";
 }
@@ -1395,28 +1391,17 @@ async function selectItem(key, name, price) {
    BUBBLE ACTIONS
 ========================================================= */
 function bubbleBack() {
-    // Hide bubble, restore buttons
     document.getElementById("chatBubble").classList.add("hidden");
     document.querySelector(".buyButton").style.display = "flex";
     document.querySelector(".bottomMenu").style.display = "grid";
-
-    // Back to loop video
-    crossfadeTo(LOOP_VIDEO, { loop: true });
-
+    try { crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
     selectedItem = null;
 }
 
 async function bubbleBuy() {
-    // Hide bubble
     document.getElementById("chatBubble").classList.add("hidden");
-
-    // Change video
-    await crossfadeTo(BUY_VIDEO, { loop: true });
-
-    // Show order popup after short delay
-    setTimeout(() => {
-        openOrderPopup();
-    }, 400);
+    try { await crossfadeTo(BUY_VIDEO, { loop: true }); } catch (e) {}
+    setTimeout(() => { openOrderPopup(); }, 400);
 }
 
 /* =========================================================
@@ -1424,25 +1409,19 @@ async function bubbleBuy() {
 ========================================================= */
 function openOrderPopup() {
     if (!selectedItem) return;
-
     document.getElementById("popupItemName").textContent  = selectedItem.name;
     document.getElementById("popupItemPrice").textContent = selectedItem.price;
     document.getElementById("inputGameId").value = "";
     document.getElementById("inputServerId").value = "";
     removeImage();
-
     document.getElementById("orderPopup").classList.remove("hidden");
 }
 
 function closeOrderPopup() {
     document.getElementById("orderPopup").classList.add("hidden");
-
-    // Restore home buttons
     document.querySelector(".buyButton").style.display = "flex";
     document.querySelector(".bottomMenu").style.display = "grid";
-
-    // Back to loop
-    crossfadeTo(LOOP_VIDEO, { loop: true });
+    try { crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
     selectedItem = null;
 }
 
@@ -1480,9 +1459,7 @@ function copyText(text) {
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
             showToast("Copy လုပ်ပြီးပါပြီ -- " + text);
-        }).catch(() => {
-            fallbackCopy(text);
-        });
+        }).catch(() => { fallbackCopy(text); });
     } else {
         fallbackCopy(text);
     }
@@ -1567,9 +1544,7 @@ async function submitOrder() {
 
         if (data.ok) {
             showToast("✅ Order အောင်မြင်ပါသည်");
-            setTimeout(() => {
-                closeOrderPopup();
-            }, 1200);
+            setTimeout(() => { closeOrderPopup(); }, 1200);
         } else {
             showToast("❌ ပေးပို့မှု မအောင်မြင်ပါ");
         }
@@ -1694,39 +1669,26 @@ async function manualClearAll() {
    BUTTON / SCREEN HANDLERS
 ========================================================= */
 function handleButtonClick(screenId) {
-    if (tapLocked) return;
+    // ⭐ tapLocked စစ်တာ ဖြုတ်လိုက်ပြီ (Intro မပေါ်လည်း ခလုတ်နှိပ်လို့ရ)
     showScreen(screenId);
 }
 
 function showScreen(screenId) {
-    if (tapLocked) return;
-
-    // Hide bubble if open
     document.getElementById("chatBubble").classList.add("hidden");
-
     document.getElementById("homeScreen").style.display = "none";
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-
     const target = document.getElementById(screenId);
     if (target) target.classList.add("active");
-
     if (screenId === "settingsScreen") renderSettings();
 }
 
 function showHome() {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById("homeScreen").style.display = "block";
-
-    // Restore buy + bottom
     document.querySelector(".buyButton").style.display = "flex";
     document.querySelector(".bottomMenu").style.display = "grid";
-
-    // Hide bubble
     document.getElementById("chatBubble").classList.add("hidden");
-
-    // Back to loop video
-    crossfadeTo(LOOP_VIDEO, { loop: true });
-
+    try { crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
     selectedItem = null;
 }
 
@@ -1736,12 +1698,16 @@ function showHome() {
 window.addEventListener("load", async () => {
     videoA.classList.add("active");
     renderMMServers();
-    await playRandomVideo();
 
-    // Background cache all resources
+    // ⭐ Lock ကို စစချင်းကတည်းက ဖွင့်ထား (Intro က နောက်ခံမှာပဲ ပြောင်း၊ ခလုတ်ကို ပိတ်မထား)
+    tapLocked = false;
+
+    try { await playRandomVideo(); } catch (e) {}
+
+    // Background cache
     setTimeout(() => { cacheAllResources(); }, 800);
 
-    // First tap → Intro
+    // ⭐ First tap → Intro (Lock မဖြစ်တော့)
     document.addEventListener("touchstart", handleFirstTap, { once: true });
     document.addEventListener("click",      handleFirstTap, { once: true });
 });</script>
