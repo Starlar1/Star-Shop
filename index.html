@@ -31,11 +31,6 @@
 <!-- ===== HOME SCREEN ===== -->
 <div id="homeScreen">
 
-    <div class="heartBalance">
-        <i class="fa-solid fa-heart"></i>
-        <span>0</span>
-    </div>
-
     <div class="homeTop">
         <button class="settingButton" onclick="handleTap('settingsScreen')">
             <i class="fa-solid fa-gear"></i>
@@ -72,10 +67,7 @@
     <div id="chatBubble" class="chat-bubble hidden">
         <div class="bubble-content">
             <div class="bubble-text" id="bubbleText"></div>
-            <div class="bubble-actions">
-                <button class="bubble-btn secondary" onclick="bubbleBack()">Back</button>
-                <button class="bubble-btn primary" onclick="bubbleBuy()">ဝယ်ယူမည်</button>
-            </div>
+            <div class="bubble-actions" id="bubbleActions"></div>
         </div>
     </div>
 
@@ -105,14 +97,16 @@
 <!-- ===== CHAT SCREEN ===== -->
 <div id="chatScreen" class="screen chat-screen">
 
-    <!-- Chat Header -->
     <div class="chat-header">
         <button class="chat-back-btn" onclick="showHome()">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
         <div class="chat-header-profile">
             <div class="chat-header-avatar">
-                <img src="" alt="Yui" id="headerAvatar" onerror="this.style.display='none'; this.parentNode.innerHTML='<i class=&quot;fa-solid fa-user&quot;></i>'">
+                <img src="https://i.ibb.co/rG3MDSXt/IMG-20261016-142729.jpg"
+                     alt="Yui"
+                     id="headerAvatar"
+                     onerror="this.style.display='none'; this.parentNode.innerHTML='<i class=&quot;fa-solid fa-user&quot;></i>';" />
             </div>
             <div class="chat-header-info">
                 <div class="chat-header-name">Yui</div>
@@ -130,7 +124,6 @@
         </button>
     </div>
 
-    <!-- Chat List Drawer -->
     <div id="chatListDrawer" class="chat-list-drawer hidden">
         <div class="chat-list-header">
             <div class="chat-list-title">
@@ -151,10 +144,8 @@
 
     <div id="chatListOverlay" class="chat-list-overlay hidden" onclick="toggleChatList()"></div>
 
-    <!-- Chat Messages -->
     <div class="chat-messages" id="chatMessages"></div>
 
-    <!-- Chat Input -->
     <div class="chat-input-wrap">
         <div class="chat-input-bar">
             <button class="chat-input-btn" onclick="focusInput()">
@@ -185,14 +176,140 @@
     <div class="screenBody" id="historyBody"></div>
 </div>
 
+<!-- ===== FAQ SCREEN ===== -->
 <div id="faqScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
-        <div class="screenTitle">FAQ</div>
+        <div class="screenTitle">သိထားစရာများ</div>
     </div>
-    <div class="screenBody"><div class="emptyArea"></div></div>
+    <div class="screenBody" id="faqBody">
+
+        <div class="faq-card">
+            <div class="faq-card-header">
+                <i class="fa-solid fa-gem"></i>
+                <span>💎 Diamonds မရောက်ရှိပါက</span>
+            </div>
+            <div class="faq-card-body">
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-solid fa-clock"></i>
+                        <span>စောင့်ဆိုင်းချိန်</span>
+                    </div>
+                    <div class="faq-value">
+                        3 နာရီထိ စောင့်ပေးပါ<br>
+                        3 နာရီကြာလို့မရောက်ရင် လာပြောပေးပါ
+                    </div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-brands fa-telegram"></i>
+                        <span>ဆက်သွယ်ရန်</span>
+                    </div>
+                    <div class="faq-value">
+                        Telegram -- @Starlar1<br>
+                        TikTok -- @ohstarlar
+                    </div>
+                </div>
+            </div>
+            <div class="faq-card-footer">
+                <i class="fa-solid fa-info-circle"></i>
+                3 နာရီကျော်ပါက Telegram / TikTok ကို လာပြောပေးပါ
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-card-header">
+                <i class="fa-solid fa-circle-xmark"></i>
+                <span>❌ Diamonds မရောက်ရှိခြင်း အကြောင်းရင်း</span>
+            </div>
+            <div class="faq-card-body">
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-solid fa-user-xmark"></i>
+                        <span>အဓိကအကြောင်း</span>
+                    </div>
+                    <div class="faq-value">
+                        Game ID / Server ID မှားထားပါက
+                    </div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-solid fa-clipboard-list"></i>
+                        <span>စစ်ဆေးရန်</span>
+                    </div>
+                    <div class="faq-value">
+                        မှတ်တမ်း ထဲတွင် စစ်ဆေးပါ
+                    </div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>ဖြေရှင်းနည်း</span>
+                    </div>
+                    <div class="faq-value">
+                        အော်ဒါ ပြန်တင်ပေးပါ
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-card-header">
+                <i class="fa-solid fa-globe"></i>
+                <span>🌐 Server အကြောင်း</span>
+            </div>
+            <div class="faq-card-body">
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-solid fa-flag"></i>
+                        <span>Server</span>
+                    </div>
+                    <div class="faq-value">
+                        ယခု Shop သည် Myanmar Server Only ဖြစ်သည်
+                    </div>
+                </div>
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>Ban Server ဖြစ်ပါက</span>
+                    </div>
+                    <div class="faq-value">
+                        သင့်အကောင့်သည် Ban Server ဖြစ်နေပါက<br>
+                        သင့်ငွေကို ပြန်လာယူရန် ဆက်သွယ်ပါ
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="faq-card">
+            <div class="faq-card-header">
+                <i class="fa-brands fa-telegram"></i>
+                <span>📢 ထုတ်လုပ်သည့် Channel</span>
+            </div>
+            <div class="faq-card-body">
+                <div class="faq-row">
+                    <div class="faq-label">
+                        <i class="fa-brands fa-telegram"></i>
+                        <span>Telegram Channel</span>
+                    </div>
+                    <div class="faq-value">
+                        <a href="https://t.me/StarlarCompany"
+                           target="_blank"
+                           class="faq-link">
+                            https://t.me/StarlarCompany
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="faq-card-footer">
+                <i class="fa-solid fa-bell"></i>
+                Update များအတွက် Channel ကို Join ပါ
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <div id="settingsScreen" class="screen">
@@ -228,16 +345,16 @@
             <div class="payment-info" onclick="copyText('09999999999')">
                 <i class="fa-solid fa-copy"></i>
                 <div>
-                    <div class="pay-name">Wave Money</div>
-                    <div class="pay-num">09999999999</div>
+                    <div class="pay-name">Wave Money - Sander Cho</div>
+                    <div class="pay-num">09675231161</div>
                 </div>
             </div>
 
             <div class="payment-info" onclick="copyText('09888888888')">
                 <i class="fa-solid fa-copy"></i>
                 <div>
-                    <div class="pay-name">Kpay</div>
-                    <div class="pay-num">09888888888</div>
+                    <div class="pay-name">Kpay - Sander Cho</div>
+                    <div class="pay-num">09675231161</div>
                 </div>
             </div>
 
@@ -357,29 +474,6 @@ body.locked .menuButton {
     z-index: 5;
 }
 
-.heartBalance {
-    position: absolute;
-    top: 18px;
-    left: 18px;
-    height: 38px;
-    min-width: 68px;
-    padding: 0 11px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.26);
-    background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.055));
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    box-shadow: 0 8px 28px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.16);
-    z-index: 20;
-}
-
-.heartBalance i { color: #ff6684; font-size: 14px; }
-.heartBalance span { color: #fff; font-size: 11px; font-weight: 700; }
-
 .homeTop {
     position: absolute;
     top: 18px;
@@ -416,6 +510,13 @@ body.locked .menuButton {
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.homeContent.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px);
 }
 
 .buyButton {
@@ -506,35 +607,38 @@ body.locked .menuButton {
 .menuButton:active { transform: scale(.91); }
 
 /* =========================================================
-   CHAT BUBBLE (Home)
+   ⭐ CHAT BUBBLE -- ပုံ မပါ၊ စာပဲ
 ========================================================= */
 .chat-bubble {
     position: fixed;
     left: 50%;
-    bottom: 70px;
+    bottom: 80px;
     transform: translateX(-50%);
-    z-index: 30;
+    z-index: 40;
     width: 86vw;
-    max-width: 340px;
+    max-width: 360px;
     animation: bubbleIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .chat-bubble.hidden { display: none; }
 
 @keyframes bubbleIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(20px) scale(0.9); }
+    from { opacity: 0; transform: translateX(-50%) translateY(30px) scale(0.9); }
     to   { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
 }
 
 .bubble-content {
-    background: linear-gradient(135deg, rgba(255,142,170,0.30), rgba(255,107,145,0.20));
-    border: 1px solid rgba(255,142,170,0.50);
-    border-radius: 20px;
-    padding: 16px 18px;
-    backdrop-filter: blur(22px);
-    -webkit-backdrop-filter: blur(22px);
-    box-shadow: 0 12px 40px rgba(255,75,120,0.30), inset 0 1px 0 rgba(255,255,255,0.20);
+    background: linear-gradient(135deg, rgba(255,142,170,0.35), rgba(255,107,145,0.20));
+    border: 1px solid rgba(255,142,170,0.55);
+    border-radius: 22px;
+    padding: 18px 20px;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    box-shadow: 0 12px 45px rgba(255,75,120,0.35), inset 0 1px 0 rgba(255,255,255,0.22);
     position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .bubble-content::after {
@@ -546,45 +650,52 @@ body.locked .menuButton {
     width: 0; height: 0;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-top: 12px solid rgba(255,142,170,0.30);
+    border-top: 12px solid rgba(255,142,170,0.35);
 }
 
 .bubble-text {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     color: #fff;
     line-height: 1.5;
     text-align: center;
-    margin-bottom: 12px;
+    letter-spacing: 0.2px;
+    width: 100%;
 }
 
 .bubble-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
+    width: 100%;
+}
+
+.bubble-actions:empty {
+    display: none;
 }
 
 .bubble-btn {
-    padding: 10px 12px;
-    border-radius: 12px;
+    padding: 11px 14px;
+    border-radius: 13px;
     border: none;
     font-family: inherit;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     cursor: pointer;
     transition: transform .2s;
+    letter-spacing: 0.3px;
 }
 
 .bubble-btn.secondary {
     background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.25);
+    border: 1px solid rgba(255,255,255,0.28);
     color: #fff;
 }
 
 .bubble-btn.primary {
     background: linear-gradient(135deg, #ff8eaa, #ff587f);
     color: #fff;
-    box-shadow: 0 6px 20px rgba(255,75,120,0.40);
+    box-shadow: 0 6px 22px rgba(255,75,120,0.45);
 }
 
 .bubble-btn:active { transform: scale(.94); }
@@ -594,13 +705,20 @@ body.locked .menuButton {
 ========================================================= */
 .screen {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     z-index: 50;
     display: none;
     flex-direction: column;
     background: linear-gradient(180deg, rgba(7,7,12,0.90), rgba(0,0,0,0.96));
     backdrop-filter: blur(22px);
     -webkit-backdrop-filter: blur(22px);
+    overflow: hidden;
 }
 
 .screen.active { display: flex !important; }
@@ -640,7 +758,6 @@ body.locked .menuButton {
     font-size: 15px;
     font-weight: 700;
     flex: 1;
-    margin-left: 0;
 }
 
 .clearHistoryBtn {
@@ -672,16 +789,126 @@ body.locked .menuButton {
 .emptyArea { width: 100%; min-height: 100%; }
 
 /* =========================================================
-   ⭐ CHAT SCREEN -- Android Native Look
+   FAQ SCREEN
 ========================================================= */
-.chat-screen {
-    padding: 0;
-    background: linear-gradient(180deg, #0a0a0f 0%, #050508 100%);
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
+.faq-card {
+    background: linear-gradient(135deg, rgba(255,142,170,0.08), rgba(255,107,145,0.04));
+    border: 1px solid rgba(255,142,170,0.25);
+    border-radius: 16px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    box-shadow: 0 6px 25px rgba(255,75,120,0.10);
 }
 
-/* ⭐ Header */
+.faq-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, rgba(255,142,170,0.22), rgba(255,107,145,0.12));
+    border-bottom: 1px solid rgba(255,142,170,0.20);
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.3px;
+}
+
+.faq-card-header i {
+    color: #ff8eaa;
+    font-size: 16px;
+    filter: drop-shadow(0 0 8px rgba(255,142,170,0.45));
+}
+
+.faq-card-body { padding: 12px 16px; }
+
+.faq-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.faq-row:last-child { border-bottom: none; }
+
+.faq-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ff8eaa;
+    letter-spacing: 0.3px;
+}
+
+.faq-label i {
+    font-size: 12px;
+    width: 14px;
+    text-align: center;
+}
+
+.faq-value {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.90);
+    line-height: 1.6;
+    padding-left: 21px;
+}
+
+.faq-link {
+    color: #87ceeb;
+    text-decoration: none;
+    font-weight: 700;
+    word-break: break-all;
+    display: inline-block;
+    padding: 3px 0;
+    transition: color .2s;
+}
+
+.faq-link:active { color: #ff8eaa; }
+
+.faq-card-footer {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    background: rgba(255,142,170,0.06);
+    border-top: 1px solid rgba(255,142,170,0.15);
+    font-size: 10.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.70);
+    line-height: 1.5;
+}
+
+.faq-card-footer i {
+    color: #ff8eaa;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   ⭐ CHAT SCREEN -- display: none ထား
+========================================================= */
+.chat-screen {
+    display: none;
+    padding: 0 !important;
+    background: linear-gradient(180deg, #0a0a0f 0%, #050508 100%);
+    flex-direction: column;
+    height: 100vh !important;
+    height: 100dvh !important;
+    width: 100vw !important;
+    overflow: hidden;
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.chat-screen.active {
+    display: flex !important;
+}
+
 .chat-header {
     min-height: 64px;
     padding: 10px 12px;
@@ -740,7 +967,6 @@ body.locked .menuButton {
     justify-content: center;
     border: 2px solid rgba(255,142,170,0.45);
     box-shadow: 0 4px 14px rgba(255,75,120,0.35);
-    position: relative;
 }
 
 .chat-header-avatar img {
@@ -750,10 +976,7 @@ body.locked .menuButton {
     display: block;
 }
 
-.chat-header-avatar i {
-    color: #fff;
-    font-size: 16px;
-}
+.chat-header-avatar i { color: #fff; font-size: 16px; }
 
 .chat-header-info {
     flex: 1;
@@ -788,9 +1011,7 @@ body.locked .menuButton {
     flex-shrink: 0;
 }
 
-.chat-header-status.typing {
-    color: #ff8eaa;
-}
+.chat-header-status.typing { color: #ff8eaa; }
 
 .chat-header-status.typing .status-dot {
     background: #ff8eaa;
@@ -808,16 +1029,16 @@ body.locked .menuButton {
     top: 64px;
     right: 0;
     bottom: 0;
-    width: 82%;
-    max-width: 340px;
-    background: linear-gradient(180deg, #15151c, #0a0a10);
-    border-left: 1px solid rgba(255,255,255,0.08);
+    width: 85%;
+    max-width: 360px;
+    background: linear-gradient(180deg, #12121a 0%, #0a0a10 100%);
+    border-left: 1px solid rgba(255,142,170,0.18);
     z-index: 20;
     display: flex;
     flex-direction: column;
     transform: translateX(0);
     transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: -15px 0 50px rgba(0,0,0,0.65);
+    box-shadow: -20px 0 60px rgba(0,0,0,0.70);
 }
 
 .chat-list-drawer.hidden {
@@ -826,45 +1047,74 @@ body.locked .menuButton {
 }
 
 .chat-list-header {
-    padding: 16px 18px;
+    padding: 18px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    border-bottom: 1px solid rgba(255,142,170,0.15);
+    background: linear-gradient(135deg, #ff8eaa 0%, #ff587f 100%);
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.chat-list-header::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 60%);
+    pointer-events: none;
 }
 
 .chat-list-title {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 15px;
-    font-weight: 700;
+    gap: 12px;
+    font-size: 16px;
+    font-weight: 800;
     color: #fff;
+    letter-spacing: 0.4px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.20);
+    position: relative;
+    z-index: 1;
+}
+
+.chat-list-title i {
+    font-size: 18px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.25));
 }
 
 .chat-list-close {
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
     border: none;
     background: rgba(255,255,255,0.22);
     color: #fff;
-    font-size: 13px;
+    font-size: 14px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: .2s;
+    transition: .25s;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(10px);
 }
 
-.chat-list-close:active { transform: rotate(90deg) scale(.92); }
+.chat-list-close:active {
+    transform: rotate(90deg) scale(.90);
+    background: rgba(255,255,255,0.35);
+}
 
 .chat-list-body {
     flex: 1;
     overflow-y: auto;
-    padding: 10px;
+    padding: 12px 10px;
+    -webkit-overflow-scrolling: touch;
 }
 
 .chat-list-item {
@@ -872,25 +1122,46 @@ body.locked .menuButton {
     align-items: center;
     gap: 12px;
     padding: 12px;
-    border-radius: 14px;
-    margin-bottom: 6px;
-    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
     border: 1px solid rgba(255,255,255,0.06);
     cursor: pointer;
-    transition: all .2s;
+    transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
 }
 
-.chat-list-item:active { transform: scale(.98); }
+.chat-list-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: transparent;
+    transition: background .25s;
+}
+
+.chat-list-item:active {
+    transform: scale(.98);
+    background: linear-gradient(135deg, rgba(255,142,170,0.12), rgba(255,107,145,0.06));
+}
 
 .chat-list-item.active {
     background: linear-gradient(135deg, rgba(255,142,170,0.18), rgba(255,107,145,0.10));
-    border-color: rgba(255,142,170,0.40);
-    box-shadow: 0 4px 18px rgba(255,75,120,0.15);
+    border-color: rgba(255,142,170,0.35);
+    box-shadow: 0 6px 22px rgba(255,75,120,0.18);
+}
+
+.chat-list-item.active::before {
+    background: linear-gradient(180deg, #ff8eaa, #ff587f);
+    box-shadow: 0 0 12px rgba(255,142,170,0.65);
 }
 
 .chat-list-avatar {
-    width: 42px;
-    height: 42px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
@@ -898,16 +1169,32 @@ body.locked .menuButton {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid rgba(255,142,170,0.35);
+    border: 2px solid rgba(255,142,170,0.40);
+    box-shadow: 0 4px 14px rgba(255,75,120,0.30);
+    position: relative;
+}
+
+.chat-list-avatar::after {
+    content: "";
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #6ee7a7;
+    border: 2px solid #12121a;
+    box-shadow: 0 0 8px rgba(110,231,167,0.85);
 }
 
 .chat-list-avatar img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
-.chat-list-avatar i { color: #fff; font-size: 15px; }
+.chat-list-avatar i { color: #fff; font-size: 18px; }
 
 .chat-list-item-info {
     flex: 1;
@@ -915,30 +1202,52 @@ body.locked .menuButton {
     overflow: hidden;
 }
 
+.chat-list-item-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
 .chat-list-item-title {
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 700;
     color: #fff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-bottom: 3px;
+    flex: 1;
+    letter-spacing: 0.2px;
+}
+
+.chat-list-item-time {
+    font-size: 10px;
+    color: rgba(255,255,255,0.40);
+    font-weight: 600;
+    flex-shrink: 0;
 }
 
 .chat-list-item-preview {
-    font-size: 11px;
-    color: rgba(255,255,255,0.50);
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.55);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+.chat-list-item.active .chat-list-item-preview {
+    color: rgba(255,255,255,0.75);
 }
 
 .chat-list-item-delete {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     border: none;
-    background: rgba(255,75,75,0.15);
+    background: rgba(255,75,75,0.12);
     color: #ff8888;
     font-size: 12px;
     cursor: pointer;
@@ -947,25 +1256,28 @@ body.locked .menuButton {
     justify-content: center;
     flex-shrink: 0;
     transition: .2s;
+    opacity: 0.7;
 }
 
 .chat-list-item-delete:active {
     transform: scale(.85);
-    background: rgba(255,75,75,0.40);
+    background: rgba(255,75,75,0.45);
+    opacity: 1;
 }
 
 .chat-list-footer {
-    padding: 14px;
-    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 14px 16px 18px;
+    border-top: 1px solid rgba(255,255,255,0.06);
     flex-shrink: 0;
+    background: linear-gradient(180deg, transparent, rgba(255,142,170,0.04));
 }
 
 .chat-list-clear-all {
     width: 100%;
-    padding: 12px;
-    border-radius: 12px;
+    padding: 13px;
+    border-radius: 14px;
     border: 1px solid rgba(255,75,75,0.35);
-    background: rgba(255,75,75,0.12);
+    background: linear-gradient(135deg, rgba(255,75,75,0.15), rgba(255,45,45,0.08));
     color: #ff8888;
     font-family: inherit;
     font-size: 12px;
@@ -975,17 +1287,26 @@ body.locked .menuButton {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: .2s;
+    transition: .25s;
+    letter-spacing: 0.3px;
 }
 
-.chat-list-clear-all:active { transform: scale(.97); }
+.chat-list-clear-all:active {
+    transform: scale(.97);
+    background: linear-gradient(135deg, rgba(255,75,75,0.30), rgba(255,45,45,0.15));
+}
 
 .chat-list-overlay {
     position: absolute;
-    inset: 0;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background: rgba(0,0,0,0.55);
     z-index: 15;
     transition: opacity 0.3s;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
 }
 
 .chat-list-overlay.hidden {
@@ -993,7 +1314,6 @@ body.locked .menuButton {
     pointer-events: none;
 }
 
-/* ⭐ Chat Messages Area */
 .chat-messages {
     flex: 1;
     width: 100%;
@@ -1005,12 +1325,12 @@ body.locked .menuButton {
     gap: 10px;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    min-height: 0;
     background-image:
         radial-gradient(circle at 20% 10%, rgba(255,142,170,0.04), transparent 40%),
         radial-gradient(circle at 80% 90%, rgba(255,107,145,0.03), transparent 40%);
 }
 
-/* Empty state */
 .chat-empty {
     text-align: center;
     padding: 80px 20px;
@@ -1032,7 +1352,6 @@ body.locked .menuButton {
 
 .chat-empty p { font-size: 13px; font-weight: 600; }
 
-/* ⭐ Message Row */
 .chat-msg-row {
     display: flex;
     gap: 8px;
@@ -1046,11 +1365,8 @@ body.locked .menuButton {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.chat-msg-row.me {
-    flex-direction: row-reverse;
-}
+.chat-msg-row.me { flex-direction: row-reverse; }
 
-/* Avatar */
 .chat-avatar {
     width: 32px;
     height: 32px;
@@ -1081,7 +1397,6 @@ body.locked .menuButton {
     box-shadow: 0 3px 10px rgba(0,0,0,0.20);
 }
 
-/* Content */
 .chat-msg-content {
     max-width: 76%;
     display: flex;
@@ -1089,9 +1404,7 @@ body.locked .menuButton {
     gap: 3px;
 }
 
-.chat-msg-row.me .chat-msg-content {
-    align-items: flex-end;
-}
+.chat-msg-row.me .chat-msg-content { align-items: flex-end; }
 
 .chat-msg-name {
     font-size: 10px;
@@ -1102,11 +1415,8 @@ body.locked .menuButton {
     letter-spacing: 0.3px;
 }
 
-.chat-msg-row.me .chat-msg-name {
-    display: none;
-}
+.chat-msg-row.me .chat-msg-name { display: none; }
 
-/* Bubble */
 .chat-msg-bubble {
     padding: 10px 14px;
     border-radius: 18px;
@@ -1117,10 +1427,8 @@ body.locked .menuButton {
     white-space: pre-wrap;
     color: #fff;
     position: relative;
-    letter-spacing: 0.1px;
 }
 
-/* AI Bubble */
 .chat-msg-row.ai .chat-msg-bubble {
     background: linear-gradient(135deg, #2a1f24, #1f1619);
     border: 1px solid rgba(255,142,170,0.22);
@@ -1128,7 +1436,6 @@ body.locked .menuButton {
     box-shadow: 0 3px 14px rgba(0,0,0,0.35);
 }
 
-/* User Bubble */
 .chat-msg-row.me .chat-msg-bubble {
     background: linear-gradient(135deg, #ff8eaa, #ff587f);
     border: 1px solid rgba(255,255,255,0.15);
@@ -1137,7 +1444,6 @@ body.locked .menuButton {
     color: #fff;
 }
 
-/* Time under bubble */
 .chat-msg-time {
     font-size: 9px;
     color: rgba(255,255,255,0.40);
@@ -1147,11 +1453,8 @@ body.locked .menuButton {
     margin-bottom: 2px;
 }
 
-.chat-msg-row.me .chat-msg-time {
-    text-align: right;
-}
+.chat-msg-row.me .chat-msg-time { text-align: right; }
 
-/* Typing */
 .chat-msg-row.typing .chat-msg-bubble {
     display: flex;
     align-items: center;
@@ -1184,7 +1487,6 @@ body.locked .menuButton {
     30% { transform: scale(1.35); opacity: 1; }
 }
 
-/* ⭐ Chat Input Bar */
 .chat-input-wrap {
     width: 100%;
     padding: 8px 10px 12px;
@@ -1252,9 +1554,7 @@ body.locked .menuButton {
 
 .chat-input::-webkit-scrollbar { display: none; }
 
-.chat-input::placeholder {
-    color: rgba(255,255,255,0.38);
-}
+.chat-input::placeholder { color: rgba(255,255,255,0.38); }
 
 .chat-send-btn {
     width: 38px;
@@ -1412,10 +1712,7 @@ body.locked .menuButton {
     width: 12px;
 }
 
-.history-row .value {
-    color: #fff;
-    font-weight: 700;
-}
+.history-row .value { color: #fff; font-weight: 700; }
 
 .history-date {
     margin-top: 8px;
@@ -1428,9 +1725,7 @@ body.locked .menuButton {
     gap: 6px;
 }
 
-.history-date i {
-    color: rgba(255,255,255,0.45);
-}
+.history-date i { color: rgba(255,255,255,0.45); }
 
 .empty-history {
     text-align: center;
@@ -1445,10 +1740,7 @@ body.locked .menuButton {
     display: block;
 }
 
-.empty-history p {
-    font-size: 13px;
-    font-weight: 600;
-}
+.empty-history p { font-size: 13px; font-weight: 600; }
 
 /* =========================================================
    SETTINGS
@@ -1805,9 +2097,6 @@ body.locked .menuButton {
    MOBILE
 ========================================================= */
 @media (max-width: 600px) {
-    .heartBalance { top: 17px; left: 16px; height: 36px; min-width: 64px; padding: 0 10px; gap: 6px; }
-    .heartBalance i { font-size: 13px; }
-    .heartBalance span { font-size: 10px; }
     .homeTop { top: 16px; right: 16px; }
     .homeContent { bottom: 74px; gap: 7px; }
     .buyButton { width: 240px; height: 41px; font-size: 10px; }
@@ -1817,8 +2106,9 @@ body.locked .menuButton {
     .mm-grid-3 { gap: 8px; }
     .mm-card-name { font-size: 8px; }
     .mm-card-price { font-size: 8px; }
-    .chat-bubble { bottom: 60px; }
+    .chat-bubble { bottom: 70px; }
     .chat-msg-content { max-width: 78%; }
+    .chat-list-drawer { width: 88%; }
 }</style><script>/* =========================================================
    VIDEO SOURCES
 ========================================================= */
@@ -1867,17 +2157,16 @@ const GROUP_ID  = "@StarlarShopCom";
 /* =========================================================
    CONSTANTS
 ========================================================= */
-const UNLOCK_DELAY_MS    = 5000;
-const BUY_POPUP_DELAY_MS = 5000;
+const UNLOCK_DELAY_MS        = 5000;
+const BUY_POPUP_DELAY_MS     = 5000;
+const ITEM_MESSAGE_SHOW_MS   = 3000;   /* ⭐ Item စာ ၃ စက္ကန့်ပဲ ပြ */
 
 /* =========================================================
    YUI CONFIG
-   ⚠️ Profile Avatar ကို ဒီမှာ ပြင်ပါ
 ========================================================= */
 const YUI_NAME = "Yui";
-const YUI_AVATAR = "https://i.ibb.co/placeholder/yui.png"; // ⭐ သင့် ImgBB link ထည့်ပါ
+const YUI_AVATAR = "https://i.ibb.co/rG3MDSXt/IMG-20261016-142729.jpg";
 
-/* ⭐ Model 1 ခုပဲ */
 const STAR_MODELS = {
     star1: {
         name: "Star 1.0",
@@ -1888,7 +2177,7 @@ const STAR_MODELS = {
                 model: "openai",
                 messages: messages,
                 max_tokens: 1024,
-                temperature: 0.7
+                temperature: 0.85
             };
         }
     }
@@ -1897,15 +2186,28 @@ const STAR_MODELS = {
 const YUI_SYSTEM_PROMPT =
 `မင်းက "Yui" လို့ခေါ်တဲ့ မိန်းကလေးတစ်ယောက်ပါ
 
-စည်းကမ်းချက်များ
+အရေးကြီးဆုံး စည်းကမ်းချက်များ
+- မင်းက မိန်းကလေးတစ်ယောက်လို ပြောရမယ်
+- ကိုယ်ကိုကိုယ် "Yui" လို့ပဲ ခေါ်ပါ
 - မြန်မာလိုပဲ ပြောပါ
-- မိန်းကလေးတစ်ယောက်လို ပြောပါ
-- စကားပြောသလိုပဲ ပြောပါ
-- ချစ်စရာကောင်းစွာ ပြောပါ
-- အစက် နဲ့ မြန်မာပုဒ်ကွက် မသုံးပါနဲ့
-- ရှင်းရှင်းလင်းလင်း ပြောပါ
+- နွေးထွေးပြီး ချစ်စရာကောင်းတဲ့ လေသံနဲ့ ပြောပါ
+- သူငယ်ချင်းတစ်ယောက်လို ရင်းရင်းနှီးနှီး ပြောပါ
+
+ပြောပုံဆိုပုံ Style
+- "ဟုတ်ကဲ့" "အင်း" "အို" "ဟင်" စတဲ့ မိန်းကလေးလေသံ သုံးပါ
+- "နော်" "လား" "ရဲ့" "ပါ" "လေ" "ဟဲ့" စတာတွေ သုံးပါ
+- စိတ်ခံစားချက် ပါတဲ့ စကားလုံး သုံးပါ
+- 😊 🥰 😄 😅 💕 ✨ စတဲ့ emoji နည်းနည်း ထည့်ပါ
+- "ဟီး" "ဟီးဟီး" ရယ်သံ ထည့်ပါ
+- ရိုးရိုးရှင်းရှင်း ပြောပါ
 - တိုတိုပဲ ပြောပါ
-- လိုတာပဲ ပြောပါ
+- အစက် နဲ့ မြန်မာပုဒ်ကွက် တော်တော်လေး မသုံးပါနဲ့
+
+မလုပ်ရတာများ
+- မင်းက AI လို့ ဘယ်တော့မှ မပြောပါနဲ့
+- စက်ရုပ် လိုလို မပြောပါနဲ့
+- ရှည်ရှည်ဝေးဝေး မပြောပါနဲ့
+- ကိုယ်ကို "ကျွန်တော်" "ကျွန်မ" လို့ မခေါ်ပါနဲ့
 - မေးတာကို တိုက်ရိုက်ဖြေပါ`;
 
 /* =========================================================
@@ -1929,7 +2231,6 @@ async function callYuiAI(userMessage, history) {
     const model = STAR_MODELS.star1;
     const body = model.buildBody(messages);
 
-    // Method 1: POST JSON
     try {
         const res = await fetch(model.endpoint, {
             method: "POST",
@@ -1946,7 +2247,6 @@ async function callYuiAI(userMessage, history) {
         console.warn("POST failed, trying GET...");
     }
 
-    // Method 2: GET fallback
     try {
         let fullPrompt = YUI_SYSTEM_PROMPT + "\n\n";
         recent.forEach(m => {
@@ -1967,7 +2267,7 @@ async function callYuiAI(userMessage, history) {
         console.error("GET failed too:", e);
     }
 
-    return "ခဏနေမှ ပြန်ပြောလိုက်မယ်နော်";
+    return "ခဏနေမှ ပြန်ပြောလိုက်မယ်နော် 🥰";
 }
 
 function parseYuiReply(text) {
@@ -2019,40 +2319,46 @@ function unlockAudio() {
    MM SERVER DATA
 ========================================================= */
 const MM_PASSES = [
-    { name: "Weekly Pass", price: "6,600 Ks", image: "https://i.ibb.co/cK8h3WvH/Grid-Art-20251216-174338901.jpg", key: "Weekly Pass" }
+    { name: "Weekly Pass", price: "7,100 Ks", image: "https://i.ibb.co/cK8h3WvH/Grid-Art-20251216-174338901.jpg", key: "Weekly Pass" }
 ];
 
 const MM_2X = [
-    { name: "50+50 Diamonds", price: "3,500 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg", key: "plus" },
-    { name: "150+150 Diamonds", price: "10,300 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg", key: "plus" },
-    { name: "250+250 Diamonds", price: "16,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "big" },
-    { name: "500+500 Diamonds", price: "33,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "big" }
+    { name: "50+50 Diamonds", price: "4,000 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg", key: "plus" },
+    { name: "150+150 Diamonds", price: "11,000 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg", key: "plus" },
+    { name: "250+250 Diamonds", price: "17,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "big" },
+    { name: "500+500 Diamonds", price: "35,300 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "big" }
 ];
 
 const MM_ALL_DIAMONDS = [
     { name: "14 Diamonds", price: "1,400 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
     { name: "28 Diamonds", price: "2,500 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
     { name: "42 Diamonds", price: "3,800 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
-    { name: "55 Diamonds", price: "4,700 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
-    { name: "86 Diamonds", price: "5,600 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
-    { name: "112 Diamonds", price: "7,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
-    { name: "172 Diamonds", price: "10,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
-    { name: "257 Diamonds", price: "15,700 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
-    { name: "343 Diamonds", price: "20,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
-    { name: "429 Diamonds", price: "26,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
-    { name: "514 Diamonds", price: "30,900 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
-    { name: "600 Diamonds", price: "36,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
-    { name: "706 Diamonds", price: "41,500 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
-    { name: "878 Diamonds", price: "51,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
-    { name: "963 Diamonds", price: "56,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
-    { name: "1049 Diamonds", price: "62,700 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
-    { name: "1135 Diamonds", price: "67,500 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
-    { name: "1412 Diamonds", price: "83,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
-    { name: "2195 Diamonds", price: "125,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1049-2195" },
-    { name: "2901 Diamonds", price: "166,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
-    { name: "3688 Diamonds", price: "209,500 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
-    { name: "5532 Diamonds", price: "315,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
-    { name: "9288 Diamonds", price: "520,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" }
+    { name: "55 Diamonds", price: "4,800 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
+    { name: "86 Diamonds", price: "5,800 Ks", image: "https://i.ibb.co/KxXJcjJP/Grid-Art-20251216-173741174.jpg", key: "14-514" },
+    { name: "172 Diamonds", price: "11,200 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "257 Diamonds", price: "16,200 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "279 Diamonds", price: "18,100 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "343 Diamonds", price: "21,700 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "429 Diamonds", price: "27,200 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "514 Diamonds", price: "32,000 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "14-514" },
+    { name: "600 Diamonds", price: "37,600 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "706 Diamonds", price: "43,500 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "878 Diamonds", price: "54,600 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "963 Diamonds", price: "59,700 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
+    { name: "1049 Diamonds", price: "65,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "600-1049" },
+    { name: "1135 Diamonds", price: "70,300 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
+    { name: "1412 Diamonds", price: "87,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
+    { name: "1584 Diamonds", price: "98,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
+    { name: "1755 Diamonds", price: "108,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
+    { name: "2195 Diamonds", price: "130,500 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1049-2195" },
+    { name: "2367 Diamonds", price: "142,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1049-2195" },
+    { name: "2538 Diamonds", price: "153,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1049-2195" },
+    { name: "3244 Diamonds", price: "195,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "3688 Diamonds", price: "220,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "4394 Diamonds", price: "263,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "5100 Diamonds", price: "305,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "5532 Diamonds", price: "329,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "9288 Diamonds", price: "548,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" }
 ];
 
 /* =========================================================
@@ -2067,6 +2373,8 @@ let selectedItem  = null;
 let uploadedImage = null;
 let introStarted  = false;
 
+let buyVideoPlaying = false;
+
 document.body.classList.add("locked");
 
 videoA.muted = true;
@@ -2077,11 +2385,51 @@ let chatListVisible = false;
 let yuiTyping = {};
 let yuiBusy = false;
 
-/* ⭐ Header Avatar ကို သတ်မှတ် */
+/* ⭐ DOMContentLoaded -- header avatar + chat avatar ၂ ခုလုံး သတ်မှတ် */
 document.addEventListener("DOMContentLoaded", () => {
     const headerAvatar = document.getElementById("headerAvatar");
     if (headerAvatar) headerAvatar.src = YUI_AVATAR;
 });
+
+/* =========================================================
+   ⭐ BUBBLE UI HELPERS
+========================================================= */
+function showBubble(text, actions = []) {
+    const bubble = document.getElementById("chatBubble");
+    const textEl = document.getElementById("bubbleText");
+    const actionsEl = document.getElementById("bubbleActions");
+
+    textEl.textContent = text;
+
+    if (actions && actions.length > 0) {
+        let html = "";
+        actions.forEach(a => {
+            html += `<button class="bubble-btn ${a.type}" onclick="${a.onclick}">${a.label}</button>`;
+        });
+        actionsEl.innerHTML = html;
+        actionsEl.style.display = "grid";
+    } else {
+        actionsEl.innerHTML = "";
+        actionsEl.style.display = "none";
+    }
+
+    bubble.classList.remove("hidden");
+}
+
+function hideBubble() {
+    const bubble = document.getElementById("chatBubble");
+    bubble.classList.add("hidden");
+}
+
+function hideHomeContent() {
+    const content = document.querySelector(".homeContent");
+    if (content) content.classList.add("hidden");
+}
+
+function showHomeContent() {
+    const content = document.querySelector(".homeContent");
+    if (content) content.classList.remove("hidden");
+}
 
 /* =========================================================
    INDEXEDDB
@@ -2354,10 +2702,20 @@ async function handleFirstTap() {
     if (introStarted) return;
     introStarted = true;
     unlockAudio();
+
+    hideHomeContent();
+
+    showBubble("မင်္ဂလာပါ ဘာများဝယ်ယူလိုပါသလဲ", []);
+
     try { await crossfadeTo(INTRO_VIDEO, { loop: true }); } catch (e) {}
+
     setTimeout(async () => {
         try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
+
         unlockUI();
+
+        hideBubble();
+        showHomeContent();
     }, UNLOCK_DELAY_MS);
 }
 
@@ -2448,45 +2806,74 @@ function renderMMServers() {
 }
 
 /* =========================================================
-   ITEM SELECT
+   ⭐ ITEM SELECT
+   ⭐ စာ "မင်းဝယ်ချင်တာဒါလား" ကို ၃ စက္ကန့်ပဲ ပြ
+   ⭐ ၃ စက္ကန့်ပြီးရင် Back/ဝယ်ယူမည် စာ ပြောင်း
 ========================================================= */
 async function selectItem(key, name, price) {
     selectedItem = { key, name, price };
 
+    buyVideoPlaying = false;
+
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById("homeScreen").style.display = "block";
 
+    hideHomeContent();
+
     const videoURL = ITEM_VIDEOS[key] || LOOP_VIDEO;
+
+    /* ⭐ ၁) စာ "မင်းဝယ်ချင်တာဒါလား" ပြ (ခလုတ် မပါ) */
+    showBubble(`မင်းဝယ်ချင်တာဒါလား -- ${name} (${price})`, []);
+
+    /* ⭐ ၂) Item VD ဖွင့် */
     try { await crossfadeTo(videoURL, { loop: false }); } catch (e) {}
 
-    const bubble = document.getElementById("chatBubble");
-    const text = document.getElementById("bubbleText");
-    text.innerHTML = `
-        <div style="font-size:13px;font-weight:800;margin-bottom:6px;">${name}</div>
-        <div style="font-size:11px;color:#ffd0dc;font-weight:600;">${price}</div>
-        <div style="font-size:10px;margin-top:8px;color:#fff;">ဝယ်ယူလိုပါသလား?</div>
-    `;
-    bubble.classList.remove("hidden");
+    /* ⭐ ၃) ၃ စက္ကန့်အကြာ -- စာ ပြောင်း + ခလုတ် ပေါ် */
+    let handled = false;
 
-    document.querySelector(".buyButton").style.display = "none";
-    document.querySelector(".bottomMenu").style.display = "none";
+    const showItemActions = () => {
+        if (handled) return;
+        handled = true;
+
+        showBubble(
+            `မင်းဝယ်ချင်တာဒါလား -- ${name} (${price})`,
+            [
+                { type: "secondary", label: "Back", onclick: "bubbleBack()" },
+                { type: "primary", label: "ဝယ်ယူမည်", onclick: "bubbleBuy()" }
+            ]
+        );
+    };
+
+    /* ⭐ ၃ စက္ကန့် Timer -- VD ပြီးပြီးမပြီး ခလုတ် ပေါ် */
+    setTimeout(showItemActions, ITEM_MESSAGE_SHOW_MS);
 }
 
 /* =========================================================
    BUBBLE ACTIONS
 ========================================================= */
 async function bubbleBack() {
-    document.getElementById("chatBubble").classList.add("hidden");
-    document.querySelector(".buyButton").style.display = "flex";
-    document.querySelector(".bottomMenu").style.display = "grid";
+    hideBubble();
+    showHomeContent();
+
+    buyVideoPlaying = false;
+
     try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
+
     selectedItem = null;
 }
 
 async function bubbleBuy() {
-    document.getElementById("chatBubble").classList.add("hidden");
-    try { await crossfadeTo(BUY_VIDEO, { loop: true }); } catch (e) {}
-    setTimeout(() => { openOrderPopup(); }, BUY_POPUP_DELAY_MS);
+    showBubble("ကျေးဇူးပြုပြီး မင်းရဲ့ အချက်အလက်တွေထည့်ရေးပေးပါနော်", []);
+
+    buyVideoPlaying = true;
+
+    try {
+        await crossfadeTo(BUY_VIDEO, { loop: false });
+    } catch (e) {}
+
+    setTimeout(() => {
+        openOrderPopup();
+    }, BUY_POPUP_DELAY_MS);
 }
 
 /* =========================================================
@@ -2504,8 +2891,12 @@ function openOrderPopup() {
 
 function closeOrderPopup() {
     document.getElementById("orderPopup").classList.add("hidden");
-    document.querySelector(".buyButton").style.display = "flex";
-    document.querySelector(".bottomMenu").style.display = "grid";
+
+    buyVideoPlaying = false;
+
+    hideBubble();
+    showHomeContent();
+
     try { crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
     selectedItem = null;
 }
@@ -2730,6 +3121,26 @@ function formatTime(ts) {
     return `${h}:${m} ${ampm}`;
 }
 
+function formatShortTime(ts) {
+    const d = new Date(ts || Date.now());
+    const now = new Date();
+    const diffDays = Math.floor((now - d) / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) {
+        let h = d.getHours();
+        const m = d.getMinutes().toString().padStart(2, "0");
+        const ampm = h >= 12 ? "PM" : "AM";
+        h = h % 12 || 12;
+        return `${h}:${m} ${ampm}`;
+    } else if (diffDays === 1) {
+        return "Yesterday";
+    } else if (diffDays < 7) {
+        return `${diffDays} days ago`;
+    } else {
+        return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    }
+}
+
 function renderMessageHTML(m) {
     if (m.role === "ai") {
         return `
@@ -2780,7 +3191,6 @@ function escapeHTML(text) {
     return div.innerHTML;
 }
 
-/* ⭐ Header Status Update */
 function updateHeaderStatus(isTyping) {
     const status = document.getElementById("headerStatus");
     const statusText = document.getElementById("headerStatusText");
@@ -2879,7 +3289,6 @@ async function sendChatMessage() {
     }
 }
 
-/* ⭐ Enter key + Auto-resize */
 document.addEventListener("DOMContentLoaded", () => {
     const input = document.getElementById("chatInput");
     if (!input) return;
@@ -2962,6 +3371,7 @@ async function renderChatList() {
     chats.forEach(c => {
         const last = (c.messages || []).slice(-1)[0];
         const preview = last ? last.text.substring(0, 40) : "စကားစမည်...";
+        const timeStr = last ? formatShortTime(last.timestamp) : "";
         const isActive = c.id === currentChatId;
 
         html += `
@@ -2970,7 +3380,10 @@ async function renderChatList() {
                     <img src="${YUI_AVATAR}" alt="${YUI_NAME}" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-solid fa-user&quot;></i>'">
                 </div>
                 <div class="chat-list-item-info">
-                    <div class="chat-list-item-title">${escapeHTML(c.title || "Chat")}</div>
+                    <div class="chat-list-item-header">
+                        <div class="chat-list-item-title">${escapeHTML(c.title || YUI_NAME)}</div>
+                        <div class="chat-list-item-time">${timeStr}</div>
+                    </div>
                     <div class="chat-list-item-preview">${escapeHTML(preview)}</div>
                 </div>
                 <button class="chat-list-item-delete" onclick="event.stopPropagation(); deleteChat('${c.id}')">
@@ -3196,6 +3609,14 @@ function handleTap(screenId) {
         return;
     }
     unlockAudio();
+
+    if (buyVideoPlaying) {
+        buyVideoPlaying = false;
+    }
+
+    hideBubble();
+    showHomeContent();
+
     showScreen(screenId);
 }
 
@@ -3205,8 +3626,7 @@ function handleTap(screenId) {
 function showScreen(screenId) {
     if (document.body.classList.contains("locked")) return;
 
-    const bubble = document.getElementById("chatBubble");
-    if (bubble) bubble.classList.add("hidden");
+    hideBubble();
 
     const home = document.getElementById("homeScreen");
     if (home) home.style.display = "none";
@@ -3227,9 +3647,12 @@ function showScreen(screenId) {
 function showHome() {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById("homeScreen").style.display = "block";
-    document.querySelector(".buyButton").style.display = "flex";
-    document.querySelector(".bottomMenu").style.display = "grid";
-    document.getElementById("chatBubble").classList.add("hidden");
+
+    showHomeContent();
+    hideBubble();
+
+    buyVideoPlaying = false;
+
     try { crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
     selectedItem = null;
 }
