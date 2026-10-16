@@ -6,12 +6,13 @@
       content="width=device-width,
                initial-scale=1.0,
                maximum-scale=1.0,
-               user-scalable=no">
+               user-scalable=no,
+               viewport-fit=cover">
 <title>Star Shop</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet">
 <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -20,11 +21,12 @@
 
 <body>
 
-<!-- ===== DOUBLE VIDEO FOR CROSSFADE ===== -->
-<video id="bgVideoA" class="bgVideo active" autoplay muted playsinline preload="auto"></video>
-<video id="bgVideoB" class="bgVideo" muted playsinline preload="auto"></video>
+<video id="bgVideoA" class="bgVideo active" autoplay playsinline preload="auto"></video>
+<video id="bgVideoB" class="bgVideo" playsinline preload="auto"></video>
 
 <div class="videoOverlay"></div>
+
+<div id="lockOverlay" class="lock-overlay"></div>
 
 <!-- ===== HOME SCREEN ===== -->
 <div id="homeScreen">
@@ -35,39 +37,38 @@
     </div>
 
     <div class="homeTop">
-        <button class="settingButton" onclick="handleButtonClick('settingsScreen')">
+        <button class="settingButton" onclick="handleTap('settingsScreen')">
             <i class="fa-solid fa-gear"></i>
         </button>
     </div>
 
     <div class="homeContent">
 
-        <button class="buyButton" onclick="handleButtonClick('diamondsScreen')">
+        <button class="buyButton" onclick="handleTap('diamondsScreen')">
             <i class="fa-solid fa-gem"></i>
             <span>ဝယ်ယူမည်</span>
         </button>
 
         <div class="bottomMenu">
-            <button class="menuButton active" onclick="handleButtonClick('homeNewScreen')">
+            <button class="menuButton active" onclick="handleTap('homeNewScreen')">
                 <i class="fa-solid fa-house"></i>
                 <span>Home</span>
             </button>
-            <button class="menuButton" onclick="handleButtonClick('chatScreen')">
+            <button class="menuButton" onclick="handleTap('chatScreen')">
                 <i class="fa-solid fa-comments"></i>
                 <span>Chat</span>
             </button>
-            <button class="menuButton" onclick="handleButtonClick('historyScreen')">
+            <button class="menuButton" onclick="handleTap('historyScreen')">
                 <i class="fa-solid fa-clock-rotate-left"></i>
                 <span>မှတ်တမ်း</span>
             </button>
-            <button class="menuButton" onclick="handleButtonClick('faqScreen')">
+            <button class="menuButton" onclick="handleTap('faqScreen')">
                 <i class="fa-solid fa-circle-question"></i>
                 <span>FAQ</span>
             </button>
         </div>
     </div>
 
-    <!-- ===== CHAT BUBBLE ===== -->
     <div id="chatBubble" class="chat-bubble hidden">
         <div class="bubble-content">
             <div class="bubble-text" id="bubbleText"></div>
@@ -80,7 +81,7 @@
 
 </div>
 
-<!-- ===== OTHER SCREENS ===== -->
+<!-- ===== SCREENS ===== -->
 <div id="homeNewScreen" class="screen">
     <div class="screenHeader">
         <button class="backButton" onclick="showHome()">
@@ -101,14 +102,74 @@
     <div class="screenBody" id="diamondsBody"></div>
 </div>
 
-<div id="chatScreen" class="screen">
-    <div class="screenHeader">
-        <button class="backButton" onclick="showHome()">
+<!-- ===== CHAT SCREEN ===== -->
+<div id="chatScreen" class="screen chat-screen">
+
+    <!-- Chat Header -->
+    <div class="chat-header">
+        <button class="chat-back-btn" onclick="showHome()">
             <i class="fa-solid fa-arrow-left"></i>
         </button>
-        <div class="screenTitle">Chat</div>
+        <div class="chat-header-profile">
+            <div class="chat-header-avatar">
+                <img src="" alt="Yui" id="headerAvatar" onerror="this.style.display='none'; this.parentNode.innerHTML='<i class=&quot;fa-solid fa-user&quot;></i>'">
+            </div>
+            <div class="chat-header-info">
+                <div class="chat-header-name">Yui</div>
+                <div class="chat-header-status" id="headerStatus">
+                    <span class="status-dot"></span>
+                    <span id="headerStatusText">Online</span>
+                </div>
+            </div>
+        </div>
+        <button class="chat-header-btn" onclick="createNewChat()" title="New Chat">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+        <button class="chat-header-btn" onclick="toggleChatList()" title="Chat List">
+            <i class="fa-solid fa-bars"></i>
+        </button>
     </div>
-    <div class="screenBody"><div class="emptyArea"></div></div>
+
+    <!-- Chat List Drawer -->
+    <div id="chatListDrawer" class="chat-list-drawer hidden">
+        <div class="chat-list-header">
+            <div class="chat-list-title">
+                <i class="fa-solid fa-comments"></i>
+                <span>Chats</span>
+            </div>
+            <button class="chat-list-close" onclick="toggleChatList()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="chat-list-body" id="chatListBody"></div>
+        <div class="chat-list-footer">
+            <button class="chat-list-clear-all" onclick="clearAllChats()">
+                <i class="fa-solid fa-trash-can"></i> Clear All
+            </button>
+        </div>
+    </div>
+
+    <div id="chatListOverlay" class="chat-list-overlay hidden" onclick="toggleChatList()"></div>
+
+    <!-- Chat Messages -->
+    <div class="chat-messages" id="chatMessages"></div>
+
+    <!-- Chat Input -->
+    <div class="chat-input-wrap">
+        <div class="chat-input-bar">
+            <button class="chat-input-btn" onclick="focusInput()">
+                <i class="fa-solid fa-face-smile"></i>
+            </button>
+            <textarea id="chatInput"
+                      class="chat-input"
+                      placeholder="စာ ရိုက်ပါ..."
+                      rows="1"
+                      autocomplete="off"></textarea>
+            <button class="chat-send-btn" id="chatSendBtn" onclick="sendChatMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
 </div>
 
 <div id="historyScreen" class="screen">
@@ -117,8 +178,11 @@
             <i class="fa-solid fa-arrow-left"></i>
         </button>
         <div class="screenTitle">မှတ်တမ်း</div>
+        <button class="clearHistoryBtn" onclick="clearHistory()">
+            <i class="fa-solid fa-trash-can"></i>
+        </button>
     </div>
-    <div class="screenBody"><div class="emptyArea"></div></div>
+    <div class="screenBody" id="historyBody"></div>
 </div>
 
 <div id="faqScreen" class="screen">
@@ -242,9 +306,9 @@ html, body {
     height: 100%;
     object-fit: cover;
     z-index: 0;
-    background: transparent;
+    background: #000;
     opacity: 0;
-    transition: opacity 0.35s ease;
+    transition: opacity 0.25s ease;
     pointer-events: none;
 }
 
@@ -261,6 +325,27 @@ html, body {
         rgba(0,0,0,0.03) 35%,
         rgba(0,0,0,0.45) 100%
     );
+}
+
+/* =========================================================
+   LOCK OVERLAY
+========================================================= */
+.lock-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+}
+
+.lock-overlay.unlocked { display: none; }
+
+body.locked .settingButton,
+body.locked .buyButton,
+body.locked .menuButton {
+    pointer-events: none;
+    opacity: 0.85;
 }
 
 /* =========================================================
@@ -421,12 +506,12 @@ html, body {
 .menuButton:active { transform: scale(.91); }
 
 /* =========================================================
-   CHAT BUBBLE
+   CHAT BUBBLE (Home)
 ========================================================= */
 .chat-bubble {
     position: fixed;
     left: 50%;
-    bottom: 140px;
+    bottom: 70px;
     transform: translateX(-50%);
     z-index: 30;
     width: 86vw;
@@ -471,7 +556,6 @@ html, body {
     line-height: 1.5;
     text-align: center;
     margin-bottom: 12px;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.30);
 }
 
 .bubble-actions {
@@ -514,12 +598,12 @@ html, body {
     z-index: 50;
     display: none;
     flex-direction: column;
-    background: linear-gradient(180deg, rgba(7,7,12,0.82), rgba(0,0,0,0.94));
+    background: linear-gradient(180deg, rgba(7,7,12,0.90), rgba(0,0,0,0.96));
     backdrop-filter: blur(22px);
     -webkit-backdrop-filter: blur(22px);
 }
 
-.screen.active { display: flex; }
+.screen.active { display: flex !important; }
 
 .screenHeader {
     width: 100%;
@@ -530,6 +614,8 @@ html, body {
     background: rgba(255,255,255,0.045);
     border-bottom: 1px solid rgba(255,255,255,0.10);
     flex-shrink: 0;
+    position: relative;
+    gap: 10px;
 }
 
 .backButton {
@@ -545,15 +631,35 @@ html, body {
     font-size: 13px;
     cursor: pointer;
     transition: .2s;
+    flex-shrink: 0;
 }
 
 .backButton:active { transform: scale(.90); }
 
 .screenTitle {
-    margin-left: 12px;
     font-size: 15px;
     font-weight: 700;
+    flex: 1;
+    margin-left: 0;
 }
+
+.clearHistoryBtn {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,75,75,0.35);
+    background: rgba(255,75,75,0.12);
+    color: #ff8888;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+    transition: .2s;
+    flex-shrink: 0;
+}
+
+.clearHistoryBtn:active { transform: scale(.90); }
 
 .screenBody {
     flex: 1;
@@ -564,6 +670,619 @@ html, body {
 }
 
 .emptyArea { width: 100%; min-height: 100%; }
+
+/* =========================================================
+   ⭐ CHAT SCREEN -- Android Native Look
+========================================================= */
+.chat-screen {
+    padding: 0;
+    background: linear-gradient(180deg, #0a0a0f 0%, #050508 100%);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ⭐ Header */
+.chat-header {
+    min-height: 64px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(20,20,28,0.98), rgba(12,12,18,0.98));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,142,170,0.15);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.45);
+    z-index: 5;
+    flex-shrink: 0;
+}
+
+.chat-back-btn,
+.chat-header-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.06);
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+    flex-shrink: 0;
+}
+
+.chat-back-btn:active,
+.chat-header-btn:active {
+    background: rgba(255,142,170,0.20);
+    transform: scale(.92);
+}
+
+.chat-header-profile {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.chat-header-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,142,170,0.45);
+    box-shadow: 0 4px 14px rgba(255,75,120,0.35);
+    position: relative;
+}
+
+.chat-header-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.chat-header-avatar i {
+    color: #fff;
+    font-size: 16px;
+}
+
+.chat-header-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.chat-header-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 2px;
+}
+
+.chat-header-status {
+    font-size: 10px;
+    color: rgba(110,231,167,0.90);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #6ee7a7;
+    box-shadow: 0 0 8px rgba(110,231,167,0.80);
+    animation: statusPulse 2s infinite;
+    flex-shrink: 0;
+}
+
+.chat-header-status.typing {
+    color: #ff8eaa;
+}
+
+.chat-header-status.typing .status-dot {
+    background: #ff8eaa;
+    box-shadow: 0 0 8px rgba(255,142,170,0.80);
+}
+
+@keyframes statusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ⭐ Chat List Drawer */
+.chat-list-drawer {
+    position: absolute;
+    top: 64px;
+    right: 0;
+    bottom: 0;
+    width: 82%;
+    max-width: 340px;
+    background: linear-gradient(180deg, #15151c, #0a0a10);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(0);
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -15px 0 50px rgba(0,0,0,0.65);
+}
+
+.chat-list-drawer.hidden {
+    transform: translateX(100%);
+    pointer-events: none;
+}
+
+.chat-list-header {
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    flex-shrink: 0;
+}
+
+.chat-list-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.chat-list-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,255,255,0.22);
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .2s;
+}
+
+.chat-list-close:active { transform: rotate(90deg) scale(.92); }
+
+.chat-list-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.chat-list-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 14px;
+    margin-bottom: 6px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    transition: all .2s;
+}
+
+.chat-list-item:active { transform: scale(.98); }
+
+.chat-list-item.active {
+    background: linear-gradient(135deg, rgba(255,142,170,0.18), rgba(255,107,145,0.10));
+    border-color: rgba(255,142,170,0.40);
+    box-shadow: 0 4px 18px rgba(255,75,120,0.15);
+}
+
+.chat-list-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,142,170,0.35);
+}
+
+.chat-list-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat-list-avatar i { color: #fff; font-size: 15px; }
+
+.chat-list-item-info {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.chat-list-item-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 3px;
+}
+
+.chat-list-item-preview {
+    font-size: 11px;
+    color: rgba(255,255,255,0.50);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.chat-list-item-delete {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255,75,75,0.15);
+    color: #ff8888;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: .2s;
+}
+
+.chat-list-item-delete:active {
+    transform: scale(.85);
+    background: rgba(255,75,75,0.40);
+}
+
+.chat-list-footer {
+    padding: 14px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    flex-shrink: 0;
+}
+
+.chat-list-clear-all {
+    width: 100%;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255,75,75,0.35);
+    background: rgba(255,75,75,0.12);
+    color: #ff8888;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: .2s;
+}
+
+.chat-list-clear-all:active { transform: scale(.97); }
+
+.chat-list-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 15;
+    transition: opacity 0.3s;
+}
+
+.chat-list-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ⭐ Chat Messages Area */
+.chat-messages {
+    flex: 1;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px 12px 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    background-image:
+        radial-gradient(circle at 20% 10%, rgba(255,142,170,0.04), transparent 40%),
+        radial-gradient(circle at 80% 90%, rgba(255,107,145,0.03), transparent 40%);
+}
+
+/* Empty state */
+.chat-empty {
+    text-align: center;
+    padding: 80px 20px;
+    color: rgba(255,255,255,0.50);
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.chat-empty i {
+    font-size: 60px;
+    color: rgba(255,142,170,0.28);
+    margin-bottom: 20px;
+    display: block;
+}
+
+.chat-empty p { font-size: 13px; font-weight: 600; }
+
+/* ⭐ Message Row */
+.chat-msg-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    max-width: 100%;
+    animation: msgIn 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes msgIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.chat-msg-row.me {
+    flex-direction: row-reverse;
+}
+
+/* Avatar */
+.chat-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255,142,170,0.30);
+    box-shadow: 0 3px 10px rgba(255,75,120,0.25);
+    margin-bottom: 4px;
+}
+
+.chat-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.chat-avatar i { color: #fff; font-size: 13px; }
+
+.chat-msg-row.me .chat-avatar {
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.10));
+    border-color: rgba(255,255,255,0.20);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.20);
+}
+
+/* Content */
+.chat-msg-content {
+    max-width: 76%;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.chat-msg-row.me .chat-msg-content {
+    align-items: flex-end;
+}
+
+.chat-msg-name {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ff8eaa;
+    padding-left: 12px;
+    margin-bottom: 1px;
+    letter-spacing: 0.3px;
+}
+
+.chat-msg-row.me .chat-msg-name {
+    display: none;
+}
+
+/* Bubble */
+.chat-msg-bubble {
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.48;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+    color: #fff;
+    position: relative;
+    letter-spacing: 0.1px;
+}
+
+/* AI Bubble */
+.chat-msg-row.ai .chat-msg-bubble {
+    background: linear-gradient(135deg, #2a1f24, #1f1619);
+    border: 1px solid rgba(255,142,170,0.22);
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 3px 14px rgba(0,0,0,0.35);
+}
+
+/* User Bubble */
+.chat-msg-row.me .chat-msg-bubble {
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 4px 16px rgba(255,75,120,0.32);
+    color: #fff;
+}
+
+/* Time under bubble */
+.chat-msg-time {
+    font-size: 9px;
+    color: rgba(255,255,255,0.40);
+    padding: 0 8px;
+    font-weight: 500;
+    margin-top: -1px;
+    margin-bottom: 2px;
+}
+
+.chat-msg-row.me .chat-msg-time {
+    text-align: right;
+}
+
+/* Typing */
+.chat-msg-row.typing .chat-msg-bubble {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    padding: 12px 16px;
+}
+
+.typing-dots {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ff8eaa;
+    animation: typingDot 1.4s infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingDot {
+    0%, 60%, 100% { transform: scale(1); opacity: 0.4; }
+    30% { transform: scale(1.35); opacity: 1; }
+}
+
+/* ⭐ Chat Input Bar */
+.chat-input-wrap {
+    width: 100%;
+    padding: 8px 10px 12px;
+    background: linear-gradient(180deg, rgba(12,12,18,0.92), rgba(8,8,12,0.98));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    flex-shrink: 0;
+}
+
+.chat-input-bar {
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 24px;
+    padding: 4px 4px 4px 6px;
+    transition: border-color .2s, background .2s;
+}
+
+.chat-input-bar:focus-within {
+    border-color: rgba(255,142,170,0.45);
+    background: rgba(255,255,255,0.07);
+    box-shadow: 0 0 0 3px rgba(255,142,170,0.08);
+}
+
+.chat-input-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    color: rgba(255,255,255,0.55);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: color .2s;
+}
+
+.chat-input-btn:active {
+    color: #ff8eaa;
+    transform: scale(.92);
+}
+
+.chat-input {
+    flex: 1;
+    min-height: 36px;
+    max-height: 110px;
+    padding: 9px 6px;
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.4;
+    outline: none;
+    resize: none;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.chat-input::-webkit-scrollbar { display: none; }
+
+.chat-input::placeholder {
+    color: rgba(255,255,255,0.38);
+}
+
+.chat-send-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ff8eaa, #ff587f);
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(255,75,120,0.42);
+    transition: all .2s;
+    flex-shrink: 0;
+}
+
+.chat-send-btn:active {
+    transform: scale(.88);
+    box-shadow: 0 2px 10px rgba(255,75,120,0.55);
+}
+
+.chat-send-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    box-shadow: none;
+}
 
 /* =========================================================
    SECTION / GRID
@@ -581,7 +1300,6 @@ html, body {
     border-radius: 12px;
     background: linear-gradient(135deg, rgba(255,142,170,0.20), rgba(255,107,145,0.10));
     border: 1px solid rgba(255,142,170,0.30);
-    box-shadow: 0 4px 15px rgba(255,107,145,0.10);
 }
 
 .mm-section-title i { color: #ff8eaa; font-size: 14px; }
@@ -639,6 +1357,100 @@ html, body {
 }
 
 /* =========================================================
+   HISTORY CARDS
+========================================================= */
+.history-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.history-item-name {
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.history-price {
+    font-size: 12px;
+    font-weight: 800;
+    color: #ff8eaa;
+    background: rgba(255,142,170,0.12);
+    padding: 4px 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,142,170,0.25);
+}
+
+.history-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 11px;
+}
+
+.history-row .label {
+    color: rgba(255,255,255,0.60);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.history-row .label i {
+    color: rgba(255,255,255,0.45);
+    font-size: 10px;
+    width: 12px;
+}
+
+.history-row .value {
+    color: #fff;
+    font-weight: 700;
+}
+
+.history-date {
+    margin-top: 8px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 10px;
+    color: rgba(255,255,255,0.55);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.history-date i {
+    color: rgba(255,255,255,0.45);
+}
+
+.empty-history {
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255,255,255,0.55);
+}
+
+.empty-history i {
+    font-size: 56px;
+    color: rgba(255,142,170,0.35);
+    margin-bottom: 16px;
+    display: block;
+}
+
+.empty-history p {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* =========================================================
    SETTINGS
 ========================================================= */
 .settings-card {
@@ -676,17 +1488,20 @@ html, body {
     display: flex;
     align-items: center;
     gap: 6px;
+    flex: 1;
 }
 
 .settings-row .label i {
     color: rgba(255,255,255,0.55);
     font-size: 11px;
     width: 14px;
+    flex-shrink: 0;
 }
 
 .settings-row .value {
     font-weight: 700;
     color: #ff8eaa;
+    margin-left: 10px;
 }
 
 .settings-button {
@@ -734,15 +1549,9 @@ html, body {
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     padding: 18px;
-    animation: fadeIn 0.3s ease;
 }
 
 .order-popup.hidden { display: none; }
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
 
 .popup-content {
     width: 100%;
@@ -754,7 +1563,6 @@ html, body {
     overflow: hidden;
     background: linear-gradient(180deg, #1a1a22, #0a0a10);
     border: 1px solid rgba(255,255,255,0.10);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.55);
     animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -790,10 +1598,7 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: .2s;
 }
-
-.popup-close:active { transform: rotate(90deg) scale(.92); }
 
 .popup-body {
     padding: 18px;
@@ -890,12 +1695,9 @@ html, body {
     font-family: inherit;
     font-size: 13px;
     outline: none;
-    transition: border .2s;
 }
 
-.form-group input[type="text"]:focus {
-    border-color: #ff8eaa;
-}
+.form-group input[type="text"]:focus { border-color: #ff8eaa; }
 
 .upload-area {
     padding: 22px;
@@ -904,10 +1706,7 @@ html, body {
     background: rgba(255,142,170,0.06);
     text-align: center;
     cursor: pointer;
-    transition: background .2s;
 }
-
-.upload-area:active { background: rgba(255,142,170,0.15); }
 
 .upload-area i {
     font-size: 26px;
@@ -916,10 +1715,7 @@ html, body {
     display: block;
 }
 
-.upload-area p {
-    font-size: 11px;
-    color: rgba(255,255,255,0.75);
-}
+.upload-area p { font-size: 11px; color: rgba(255,255,255,0.75); }
 
 .image-preview {
     position: relative;
@@ -972,10 +1768,8 @@ html, body {
     justify-content: center;
     gap: 9px;
     box-shadow: 0 10px 30px rgba(255,75,120,0.35);
-    transition: transform .2s;
 }
 
-.submit-btn:active { transform: scale(.97); }
 .submit-btn:disabled { opacity: 0.65; cursor: not-allowed; }
 
 /* =========================================================
@@ -992,12 +1786,14 @@ html, body {
     border-radius: 25px;
     font-size: 12px;
     font-weight: 600;
-    z-index: 200;
+    z-index: 300;
     opacity: 0;
     pointer-events: none;
     transition: all 0.3s ease;
     border: 1px solid rgba(255,142,170,0.40);
     box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+    max-width: 85vw;
+    text-align: center;
 }
 
 .toast.show {
@@ -1021,6 +1817,8 @@ html, body {
     .mm-grid-3 { gap: 8px; }
     .mm-card-name { font-size: 8px; }
     .mm-card-price { font-size: 8px; }
+    .chat-bubble { bottom: 60px; }
+    .chat-msg-content { max-width: 78%; }
 }</style><script>/* =========================================================
    VIDEO SOURCES
 ========================================================= */
@@ -1032,25 +1830,23 @@ const RANDOM_VIDEOS = [
 ];
 
 const INTRO_VIDEO =
-    "https://raw.githubusercontent.com/Starlar1/Star-Shop/aab91f85b33618517ee37fbe75ee243ed661e27e/InShot_20261015_135149927.mp4";
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/82bb7b7709c1e722fb0f11e4c3b1211e5dc2c8c0/InShot_20261016_095421219.mp4";
 
 const LOOP_VIDEO =
     "https://raw.githubusercontent.com/Starlar1/Star-Shop/17932436965a54526febf6b948ae9df4f3111672/InShot_20261015_135123172.mp4";
 
 const ITEM_VIDEOS = {
-    "Weekly Pass":
-        "https://raw.githubusercontent.com/Starlar1/Star-Shop/5590bda45ea9870817c0db14afb60114620eaa22/InShot_20261013_135523666.mp4",
-    "14-514":
-        "https://raw.githubusercontent.com/Starlar1/Star-Shop/abd87741250f21cc5e8b64f1dad435e7d9f7d44e/InShot_20261013_135401666.mp4",
-    "600-1049":
-        "https://raw.githubusercontent.com/Starlar1/Star-Shop/95e3483d6adbb6fd3f4c1a821cf630d21baa3992/InShot_20261013_135611884.mp4",
-    "1135-9288":
-        "https://raw.githubusercontent.com/Starlar1/Star-Shop/bb8d4ede6aaa5836fa9ce1d312d71dc08b7e294d/InShot_20261013_140704688.mp4",
-    "plus":
-        "https://raw.githubusercontent.com/Starlar1/Star-Shop/d5cc5477fa3ab299e3568b27de0c33f598c27f57/InShot_20261013_135452044.mp4"
+    "Weekly Pass": "https://raw.githubusercontent.com/Starlar1/Star-Shop/7618100367b37f5fc66b64b0be38a26b4324b9ae/InShot_20261016_095732562.mp4",
+    "14-514": "https://raw.githubusercontent.com/Starlar1/Star-Shop/5cafa9d6980129e8f2bf34011e5631c5e9fc666c/InShot_20261016_095636995.mp4",
+    "600-1049": "https://raw.githubusercontent.com/Starlar1/Star-Shop/41d2a538d5afe0387366967ba6f9b11813a98b25/InShot_20261016_095910614.mp4",
+    "1049-2195": "https://raw.githubusercontent.com/Starlar1/Star-Shop/246578f7604b8513c6d5997ff063bef772ec1740/InShot_20261016_095800888.mp4",
+    "1135-9288": "https://raw.githubusercontent.com/Starlar1/Star-Shop/f1047e299fea7fa20d2a634377ae73e31718a304/InShot_20261016_095821894.mp4",
+    "plus": "https://raw.githubusercontent.com/Starlar1/Star-Shop/95fd6d547864b64dae71768d569ad9e154234b2a/InShot_20261016_095703735.mp4",
+    "big": "https://raw.githubusercontent.com/Starlar1/Star-Shop/3248dc60bbd9e12b1eba4a451d3cfc424f7854be/InShot_20261016_095855354.mp4"
 };
 
-const BUY_VIDEO = LOOP_VIDEO;
+const BUY_VIDEO =
+    "https://raw.githubusercontent.com/Starlar1/Star-Shop/8995043508804f8a28e61ca0a7c4d758800927ce/InShot_20261016_100906473.mp4";
 
 const ALL_VIDEO_URLS = [
     ...RANDOM_VIDEOS,
@@ -1060,11 +1856,164 @@ const ALL_VIDEO_URLS = [
     BUY_VIDEO
 ];
 
+const SKIP_PREFETCH_URLS = [INTRO_VIDEO];
+
 /* =========================================================
    TELEGRAM
 ========================================================= */
 const BOT_TOKEN = "8094270595:AAERziCUrOYf38DMOSReu1oOSEf2LLG_qS0";
 const GROUP_ID  = "@StarlarShopCom";
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+const UNLOCK_DELAY_MS    = 5000;
+const BUY_POPUP_DELAY_MS = 5000;
+
+/* =========================================================
+   YUI CONFIG
+   ⚠️ Profile Avatar ကို ဒီမှာ ပြင်ပါ
+========================================================= */
+const YUI_NAME = "Yui";
+const YUI_AVATAR = "https://i.ibb.co/placeholder/yui.png"; // ⭐ သင့် ImgBB link ထည့်ပါ
+
+/* ⭐ Model 1 ခုပဲ */
+const STAR_MODELS = {
+    star1: {
+        name: "Star 1.0",
+        desc: "Pollinations AI",
+        endpoint: "https://text.pollinations.ai/openai",
+        buildBody: function(messages) {
+            return {
+                model: "openai",
+                messages: messages,
+                max_tokens: 1024,
+                temperature: 0.7
+            };
+        }
+    }
+};
+
+const YUI_SYSTEM_PROMPT =
+`မင်းက "Yui" လို့ခေါ်တဲ့ မိန်းကလေးတစ်ယောက်ပါ
+
+စည်းကမ်းချက်များ
+- မြန်မာလိုပဲ ပြောပါ
+- မိန်းကလေးတစ်ယောက်လို ပြောပါ
+- စကားပြောသလိုပဲ ပြောပါ
+- ချစ်စရာကောင်းစွာ ပြောပါ
+- အစက် နဲ့ မြန်မာပုဒ်ကွက် မသုံးပါနဲ့
+- ရှင်းရှင်းလင်းလင်း ပြောပါ
+- တိုတိုပဲ ပြောပါ
+- လိုတာပဲ ပြောပါ
+- မေးတာကို တိုက်ရိုက်ဖြေပါ`;
+
+/* =========================================================
+   YUI AI CALL
+========================================================= */
+async function callYuiAI(userMessage, history) {
+    const messages = [
+        { role: "system", content: YUI_SYSTEM_PROMPT }
+    ];
+
+    const recent = (history || []).slice(-10);
+    recent.forEach(m => {
+        messages.push({
+            role: m.role === "user" ? "user" : "assistant",
+            content: m.text
+        });
+    });
+
+    messages.push({ role: "user", content: userMessage });
+
+    const model = STAR_MODELS.star1;
+    const body = model.buildBody(messages);
+
+    // Method 1: POST JSON
+    try {
+        const res = await fetch(model.endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+        });
+
+        if (res.ok) {
+            const text = await res.text();
+            const reply = parseYuiReply(text);
+            if (reply) return reply;
+        }
+    } catch (e) {
+        console.warn("POST failed, trying GET...");
+    }
+
+    // Method 2: GET fallback
+    try {
+        let fullPrompt = YUI_SYSTEM_PROMPT + "\n\n";
+        recent.forEach(m => {
+            fullPrompt += (m.role === "user" ? "User: " : "Yui: ") + m.text + "\n";
+        });
+        fullPrompt += "User: " + userMessage + "\nYui:";
+
+        const encoded = encodeURIComponent(fullPrompt);
+        const getURL = `https://text.pollinations.ai/${encoded}?model=openai&private=true&referrer=StarShop`;
+
+        const res2 = await fetch(getURL, { method: "GET" });
+        if (res2.ok) {
+            const text2 = await res2.text();
+            const reply2 = parseYuiReply(text2);
+            if (reply2) return reply2;
+        }
+    } catch (e) {
+        console.error("GET failed too:", e);
+    }
+
+    return "ခဏနေမှ ပြန်ပြောလိုက်မယ်နော်";
+}
+
+function parseYuiReply(text) {
+    if (!text) return "";
+    let reply = "";
+
+    try {
+        const data = JSON.parse(text);
+        if (data.choices && data.choices[0]) {
+            if (data.choices[0].message && data.choices[0].message.content) {
+                reply = data.choices[0].message.content;
+            } else if (data.choices[0].text) {
+                reply = data.choices[0].text;
+            }
+        } else if (data.content) {
+            reply = data.content;
+        } else if (data.response) {
+            reply = data.response;
+        } else if (data.text) {
+            reply = data.text;
+        }
+    } catch (e) {
+        reply = text;
+    }
+
+    reply = reply.trim();
+    reply = reply.replace(/[.။]+$/g, "").trim();
+    reply = reply.replace(/^Yui\s*[:：]\s*/i, "").trim();
+    reply = reply.replace(/^Assistant\s*[:：]\s*/i, "").trim();
+
+    return reply;
+}
+
+/* =========================================================
+   AUDIO STATE
+========================================================= */
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    videoA.muted = false;
+    videoB.muted = false;
+    videoA.volume = 0.85;
+    videoB.volume = 0.85;
+}
 
 /* =========================================================
    MM SERVER DATA
@@ -1075,9 +2024,9 @@ const MM_PASSES = [
 
 const MM_2X = [
     { name: "50+50 Diamonds", price: "3,500 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg", key: "plus" },
-    { name: "150+150 Diamonds", price: "10,300 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "plus" },
-    { name: "250+250 Diamonds", price: "16,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "plus" },
-    { name: "500+500 Diamonds", price: "33,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "plus" }
+    { name: "150+150 Diamonds", price: "10,300 Ks", image: "https://i.ibb.co/xSb4kCPd/Grid-Art-20251216-174517473.jpg", key: "plus" },
+    { name: "250+250 Diamonds", price: "16,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "big" },
+    { name: "500+500 Diamonds", price: "33,500 Ks", image: "https://i.ibb.co/ybRx91D/Grid-Art-20251216-174656871.jpg", key: "big" }
 ];
 
 const MM_ALL_DIAMONDS = [
@@ -1096,10 +2045,10 @@ const MM_ALL_DIAMONDS = [
     { name: "706 Diamonds", price: "41,500 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
     { name: "878 Diamonds", price: "51,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
     { name: "963 Diamonds", price: "56,800 Ks", image: "https://i.ibb.co/27rgwGmb/Grid-Art-20251216-173808269.jpg", key: "600-1049" },
-    { name: "1049 Diamonds", price: "62,700 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "600-1049" },
-    { name: "1135 Diamonds", price: "67,500 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1135-9288" },
-    { name: "1412 Diamonds", price: "83,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1135-9288" },
-    { name: "2195 Diamonds", price: "125,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
+    { name: "1049 Diamonds", price: "62,700 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
+    { name: "1135 Diamonds", price: "67,500 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
+    { name: "1412 Diamonds", price: "83,000 Ks", image: "https://i.ibb.co/vCZ1MRp9/Grid-Art-20251216-173834490.jpg", key: "1049-2195" },
+    { name: "2195 Diamonds", price: "125,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1049-2195" },
     { name: "2901 Diamonds", price: "166,000 Ks", image: "https://i.ibb.co/B5BV2pVb/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
     { name: "3688 Diamonds", price: "209,500 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
     { name: "5532 Diamonds", price: "315,000 Ks", image: "https://i.ibb.co/Fk2MYrMw/Grid-Art-20251216-173857232.jpg", key: "1135-9288" },
@@ -1111,19 +2060,37 @@ const MM_ALL_DIAMONDS = [
 ========================================================= */
 const videoA = document.getElementById("bgVideoA");
 const videoB = document.getElementById("bgVideoB");
+const lockOverlay = document.getElementById("lockOverlay");
 
-let introPlayed  = false;
-let tapLocked    = true;
-let currentURL   = null;
-let selectedItem = null;
+let currentURL    = null;
+let selectedItem  = null;
 let uploadedImage = null;
+let introStarted  = false;
+
+document.body.classList.add("locked");
+
+videoA.muted = true;
+videoB.muted = true;
+
+let currentChatId = null;
+let chatListVisible = false;
+let yuiTyping = {};
+let yuiBusy = false;
+
+/* ⭐ Header Avatar ကို သတ်မှတ် */
+document.addEventListener("DOMContentLoaded", () => {
+    const headerAvatar = document.getElementById("headerAvatar");
+    if (headerAvatar) headerAvatar.src = YUI_AVATAR;
+});
 
 /* =========================================================
    INDEXEDDB
 ========================================================= */
 const DB_NAME    = "StarShopDB";
-const DB_VERSION = 1;
-const STORE_NAME = "resources";
+const DB_VERSION = 3;
+const STORE_RES  = "resources";
+const STORE_ORD  = "orders";
+const STORE_CHAT = "chats";
 let dbInstance = null;
 
 function openDB() {
@@ -1132,8 +2099,14 @@ function openDB() {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
         request.onupgradeneeded = (e) => {
             const db = e.target.result;
-            if (!db.objectStoreNames.contains(STORE_NAME)) {
-                db.createObjectStore(STORE_NAME, { keyPath: "url" });
+            if (!db.objectStoreNames.contains(STORE_RES)) {
+                db.createObjectStore(STORE_RES, { keyPath: "url" });
+            }
+            if (!db.objectStoreNames.contains(STORE_ORD)) {
+                db.createObjectStore(STORE_ORD, { keyPath: "id", autoIncrement: true });
+            }
+            if (!db.objectStoreNames.contains(STORE_CHAT)) {
+                db.createObjectStore(STORE_CHAT, { keyPath: "id" });
             }
         };
         request.onsuccess = (e) => { dbInstance = e.target.result; resolve(dbInstance); };
@@ -1145,8 +2118,8 @@ async function getResourceFromDB(url) {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
-            const tx = db.transaction(STORE_NAME, "readonly");
-            const req = tx.objectStore(STORE_NAME).get(url);
+            const tx = db.transaction(STORE_RES, "readonly");
+            const req = tx.objectStore(STORE_RES).get(url);
             req.onsuccess = () => resolve(req.result || null);
             req.onerror   = () => reject(req.error);
         });
@@ -1157,10 +2130,20 @@ async function saveResourceToDB(url, blob) {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
-            const tx = db.transaction(STORE_NAME, "readwrite");
-            const req = tx.objectStore(STORE_NAME).put({
-                url, blob, size: blob.size, savedAt: Date.now()
-            });
+            const tx = db.transaction(STORE_RES, "readwrite");
+            const req = tx.objectStore(STORE_RES).put({ url, blob, size: blob.size, savedAt: Date.now() });
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function deleteResourceFromDB(url) {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_RES, "readwrite");
+            const req = tx.objectStore(STORE_RES).delete(url);
             req.onsuccess = () => resolve(true);
             req.onerror   = () => reject(req.error);
         });
@@ -1171,8 +2154,8 @@ async function getAllResourcesFromDB() {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
-            const tx = db.transaction(STORE_NAME, "readonly");
-            const req = tx.objectStore(STORE_NAME).getAll();
+            const tx = db.transaction(STORE_RES, "readonly");
+            const req = tx.objectStore(STORE_RES).getAll();
             req.onsuccess = () => resolve(req.result || []);
             req.onerror   = () => reject(req.error);
         });
@@ -1183,8 +2166,104 @@ async function clearAllResourcesFromDB() {
     try {
         const db = await openDB();
         return new Promise((resolve, reject) => {
-            const tx = db.transaction(STORE_NAME, "readwrite");
-            const req = tx.objectStore(STORE_NAME).clear();
+            const tx = db.transaction(STORE_RES, "readwrite");
+            const req = tx.objectStore(STORE_RES).clear();
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function saveOrderToDB(order) {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_ORD, "readwrite");
+            const req = tx.objectStore(STORE_ORD).add(order);
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function getAllOrdersFromDB() {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_ORD, "readonly");
+            const req = tx.objectStore(STORE_ORD).getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return []; }
+}
+
+async function clearAllOrdersFromDB() {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_ORD, "readwrite");
+            const req = tx.objectStore(STORE_ORD).clear();
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function saveChatToDB(chat) {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_CHAT, "readwrite");
+            const req = tx.objectStore(STORE_CHAT).put(chat);
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function getChatFromDB(id) {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_CHAT, "readonly");
+            const req = tx.objectStore(STORE_CHAT).get(id);
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return null; }
+}
+
+async function getAllChatsFromDB() {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_CHAT, "readonly");
+            const req = tx.objectStore(STORE_CHAT).getAll();
+            req.onsuccess = () => resolve(req.result || []);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return []; }
+}
+
+async function deleteChatFromDB(id) {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_CHAT, "readwrite");
+            const req = tx.objectStore(STORE_CHAT).delete(id);
+            req.onsuccess = () => resolve(true);
+            req.onerror   = () => reject(req.error);
+        });
+    } catch (e) { return false; }
+}
+
+async function clearAllChatsFromDB() {
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const tx = db.transaction(STORE_CHAT, "readwrite");
+            const req = tx.objectStore(STORE_CHAT).clear();
             req.onsuccess = () => resolve(true);
             req.onerror   = () => reject(req.error);
         });
@@ -1214,13 +2293,16 @@ let currentVideo = videoA;
 let standbyVideo = videoB;
 
 async function crossfadeTo(url, { loop = true } = {}) {
-    if (currentURL === url) return;
+    if (currentURL === url && currentVideo.loop === loop) return false;
 
-    const blobURL = await getResourceBlobURL(url);
+    let src;
+    try { src = await getResourceBlobURL(url); }
+    catch (e) { src = url; }
 
     standbyVideo.loop = loop;
-    standbyVideo.src = blobURL;
+    standbyVideo.src = src;
     standbyVideo.currentTime = 0;
+    standbyVideo.muted = true;
     standbyVideo.load();
 
     await new Promise((resolve) => {
@@ -1228,15 +2310,15 @@ async function crossfadeTo(url, { loop = true } = {}) {
         const done = () => {
             if (resolved) return;
             resolved = true;
+            standbyVideo.removeEventListener("loadeddata", done);
             standbyVideo.removeEventListener("canplay", done);
+            standbyVideo.removeEventListener("error", done);
             resolve();
         };
-        if (standbyVideo.readyState >= 3) done();
-        else {
-            standbyVideo.addEventListener("canplay", done);
-            standbyVideo.addEventListener("error", done);
-            setTimeout(done, 1800); // safety
-        }
+        standbyVideo.addEventListener("loadeddata", done);
+        standbyVideo.addEventListener("canplay", done);
+        standbyVideo.addEventListener("error", done);
+        setTimeout(done, 3000);
     });
 
     try { await standbyVideo.play(); } catch (e) {}
@@ -1250,7 +2332,14 @@ async function crossfadeTo(url, { loop = true } = {}) {
         currentVideo = standbyVideo;
         standbyVideo = tmp;
         currentURL = url;
-    }, 400);
+
+        if (audioUnlocked) {
+            currentVideo.muted = false;
+            currentVideo.volume = 0.85;
+        }
+    }, 260);
+
+    return true;
 }
 
 /* =========================================================
@@ -1261,69 +2350,65 @@ async function playRandomVideo() {
     await crossfadeTo(RANDOM_VIDEOS[idx], { loop: true });
 }
 
-/* ⭐ အဓိက ဖြေရှင်းချက် -- Tap ရင် Intro စ + ၅ စက္ကန့်အကြာ Auto Unlock */
 async function handleFirstTap() {
-    if (introPlayed) return;
-    introPlayed = true;
+    if (introStarted) return;
+    introStarted = true;
+    unlockAudio();
+    try { await crossfadeTo(INTRO_VIDEO, { loop: true }); } catch (e) {}
+    setTimeout(async () => {
+        try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
+        unlockUI();
+    }, UNLOCK_DELAY_MS);
+}
 
-    // 1) ချက်ချင်း Unlock လုပ်လိုက် (Intro ဘယ်လိုဖြစ်ဖြစ် Screen နှိပ်လို့ရအောင်)
-    //    ဒါမှ Intro ဖail ဖြစ်ရင်လည်း ဘာမှ နှိပ်မရတာ မဖြစ်တော့ဘူး
-    setTimeout(() => { tapLocked = false; }, 200);
-
-    try {
-        // 2) Intro Video ကို စမ်း Play
-        const introOk = await crossfadeTo(INTRO_VIDEO, { loop: false });
-        // crossfadeTo က error တင်ရင် catch မှာ ဖမ်းမယ်
-
-        // 3) Intro ပြီးရင် Loop ပြောင်း (loop false ဖြစ်လို့ 'ended' ဖြစ်မယ်)
-        const onEnded = async () => {
-            currentVideo.removeEventListener("ended", onEnded);
-            try {
-                await crossfadeTo(LOOP_VIDEO, { loop: true });
-            } catch (e) {}
-            tapLocked = false;
-        };
-        currentVideo.addEventListener("ended", onEnded);
-
-        // 4) Safety -- ၁၅ စက္ကန့်အကြာ ဘာမှမဖြစ်လည်း Loop ကို ပြောင်း + Unlock
-        setTimeout(async () => {
-            if (tapLocked) {
-                tapLocked = false;
-                try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
-            }
-        }, 15000);
-
-    } catch (e) {
-        // Intro video မရရင် ချက်ချင်း Loop ပြောင်း + Unlock
-        tapLocked = false;
-        try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (err) {}
-    }
+function unlockUI() {
+    document.body.classList.remove("locked");
+    if (lockOverlay) lockOverlay.classList.add("unlocked");
 }
 
 /* =========================================================
-   DOWNLOAD ALL RESOURCES
+   SMART SYNC
 ========================================================= */
-async function cacheAllResources() {
-    for (const url of ALL_VIDEO_URLS) {
-        try {
-            const existing = await getResourceFromDB(url);
-            if (existing && existing.blob) {
-                if (!resourceCache[url]) {
-                    resourceCache[url] = URL.createObjectURL(existing.blob);
-                }
-                continue;
+async function syncResources() {
+    const dbRecords = await getAllResourcesFromDB();
+    const dbUrls = dbRecords.map(r => r.url);
+
+    for (const rec of dbRecords) {
+        if (!ALL_VIDEO_URLS.includes(rec.url)) {
+            await deleteResourceFromDB(rec.url);
+            if (resourceCache[rec.url]) {
+                try { URL.revokeObjectURL(resourceCache[rec.url]); } catch (e) {}
+                delete resourceCache[rec.url];
             }
-            const response = await fetch(url, { mode: "cors" });
-            if (!response.ok) continue;
-            const blob = await response.blob();
-            await saveResourceToDB(url, blob);
-            resourceCache[url] = URL.createObjectURL(blob);
-        } catch (e) {}
+        }
+    }
+
+    for (const url of ALL_VIDEO_URLS) {
+        if (SKIP_PREFETCH_URLS.includes(url)) continue;
+        if (!dbUrls.includes(url)) {
+            try {
+                const response = await fetch(url, { mode: "cors" });
+                if (!response.ok) continue;
+                const blob = await response.blob();
+                await saveResourceToDB(url, blob);
+                if (resourceCache[url]) {
+                    try { URL.revokeObjectURL(resourceCache[url]); } catch (e) {}
+                }
+                resourceCache[url] = URL.createObjectURL(blob);
+            } catch (e) {}
+        } else {
+            if (!resourceCache[url]) {
+                const rec = await getResourceFromDB(url);
+                if (rec && rec.blob) {
+                    resourceCache[url] = URL.createObjectURL(rec.blob);
+                }
+            }
+        }
     }
 }
 
 /* =========================================================
-   MM SERVER LIST RENDER
+   MM SERVER LIST
 ========================================================= */
 function createCardHTML(item) {
     return `
@@ -1372,7 +2457,7 @@ async function selectItem(key, name, price) {
     document.getElementById("homeScreen").style.display = "block";
 
     const videoURL = ITEM_VIDEOS[key] || LOOP_VIDEO;
-    try { await crossfadeTo(videoURL, { loop: true }); } catch (e) {}
+    try { await crossfadeTo(videoURL, { loop: false }); } catch (e) {}
 
     const bubble = document.getElementById("chatBubble");
     const text = document.getElementById("bubbleText");
@@ -1390,18 +2475,18 @@ async function selectItem(key, name, price) {
 /* =========================================================
    BUBBLE ACTIONS
 ========================================================= */
-function bubbleBack() {
+async function bubbleBack() {
     document.getElementById("chatBubble").classList.add("hidden");
     document.querySelector(".buyButton").style.display = "flex";
     document.querySelector(".bottomMenu").style.display = "grid";
-    try { crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
+    try { await crossfadeTo(LOOP_VIDEO, { loop: true }); } catch (e) {}
     selectedItem = null;
 }
 
 async function bubbleBuy() {
     document.getElementById("chatBubble").classList.add("hidden");
     try { await crossfadeTo(BUY_VIDEO, { loop: true }); } catch (e) {}
-    setTimeout(() => { openOrderPopup(); }, 400);
+    setTimeout(() => { openOrderPopup(); }, BUY_POPUP_DELAY_MS);
 }
 
 /* =========================================================
@@ -1453,7 +2538,7 @@ function removeImage() {
 }
 
 /* =========================================================
-   COPY TO CLIPBOARD
+   COPY / TOAST
 ========================================================= */
 function copyText(text) {
     if (navigator.clipboard) {
@@ -1475,15 +2560,10 @@ function fallbackCopy(text) {
     try {
         document.execCommand("copy");
         showToast("Copy လုပ်ပြီးပါပြီ -- " + text);
-    } catch (e) {
-        showToast("Copy မလုပ်နိုင်ပါ");
-    }
+    } catch (e) { showToast("Copy မလုပ်နိုင်ပါ"); }
     document.body.removeChild(ta);
 }
 
-/* =========================================================
-   TOAST
-========================================================= */
 function showToast(msg) {
     let t = document.querySelector(".toast");
     if (!t) {
@@ -1494,11 +2574,11 @@ function showToast(msg) {
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.remove("show"), 2200);
+    t._timer = setTimeout(() => t.classList.remove("show"), 2400);
 }
 
 /* =========================================================
-   SUBMIT ORDER TO TELEGRAM
+   SUBMIT ORDER
 ========================================================= */
 async function submitOrder() {
     const gameId   = document.getElementById("inputGameId").value.trim();
@@ -1543,6 +2623,14 @@ async function submitOrder() {
         const data = await res.json();
 
         if (data.ok) {
+            await saveOrderToDB({
+                itemName: selectedItem.name,
+                price: selectedItem.price,
+                gameId: gameId,
+                serverId: serverId,
+                dateStr: time12,
+                timestamp: Date.now()
+            });
             showToast("✅ Order အောင်မြင်ပါသည်");
             setTimeout(() => { closeOrderPopup(); }, 1200);
         } else {
@@ -1567,37 +2655,471 @@ function dataURLtoBlob(dataURL) {
 }
 
 /* =========================================================
+   CHAT FUNCTIONS
+========================================================= */
+async function ensureCurrentChat() {
+    if (currentChatId) return currentChatId;
+
+    const chats = await getAllChatsFromDB();
+    if (chats.length > 0) {
+        chats.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+        currentChatId = chats[0].id;
+        return currentChatId;
+    }
+
+    const newId = "chat_" + Date.now();
+    const newChat = {
+        id: newId,
+        title: YUI_NAME,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        messages: []
+    };
+    await saveChatToDB(newChat);
+    currentChatId = newId;
+    return newId;
+}
+
+async function loadChatMessages() {
+    const messagesBox = document.getElementById("chatMessages");
+    if (!messagesBox) return;
+
+    if (!currentChatId) await ensureCurrentChat();
+
+    const chat = await getChatFromDB(currentChatId);
+    if (!chat) {
+        messagesBox.innerHTML = `
+            <div class="chat-empty">
+                <i class="fa-solid fa-comment-dots"></i>
+                <p>စကားပြောရန် စာ ရိုက်ပါ</p>
+            </div>
+        `;
+        return;
+    }
+
+    const messages = chat.messages || [];
+    let html = "";
+
+    if (messages.length === 0) {
+        html = `
+            <div class="chat-empty">
+                <i class="fa-solid fa-comment-dots"></i>
+                <p>စကားပြောရန် စာ ရိုက်ပါ</p>
+            </div>
+        `;
+    } else {
+        messages.forEach(m => { html += renderMessageHTML(m); });
+    }
+
+    if (yuiTyping[currentChatId]) {
+        html += renderTypingHTML();
+    }
+
+    messagesBox.innerHTML = html;
+    requestAnimationFrame(() => {
+        messagesBox.scrollTop = messagesBox.scrollHeight;
+    });
+}
+
+function formatTime(ts) {
+    const d = new Date(ts || Date.now());
+    let h = d.getHours();
+    const m = d.getMinutes().toString().padStart(2, "0");
+    const ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+}
+
+function renderMessageHTML(m) {
+    if (m.role === "ai") {
+        return `
+            <div class="chat-msg-row ai">
+                <div class="chat-avatar">
+                    <img src="${YUI_AVATAR}" alt="${YUI_NAME}" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-solid fa-user&quot;></i>'">
+                </div>
+                <div class="chat-msg-content">
+                    <div class="chat-msg-name">${YUI_NAME}</div>
+                    <div class="chat-msg-bubble">${escapeHTML(m.text)}</div>
+                    <div class="chat-msg-time">${formatTime(m.timestamp)}</div>
+                </div>
+            </div>
+        `;
+    } else {
+        return `
+            <div class="chat-msg-row me">
+                <div class="chat-msg-content">
+                    <div class="chat-msg-bubble">${escapeHTML(m.text)}</div>
+                    <div class="chat-msg-time">${formatTime(m.timestamp)}</div>
+                </div>
+            </div>
+        `;
+    }
+}
+
+function renderTypingHTML() {
+    return `
+        <div class="chat-msg-row ai typing">
+            <div class="chat-avatar">
+                <img src="${YUI_AVATAR}" alt="${YUI_NAME}" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-solid fa-user&quot;></i>'">
+            </div>
+            <div class="chat-msg-content">
+                <div class="chat-msg-name">${YUI_NAME}</div>
+                <div class="chat-msg-bubble">
+                    <span class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function escapeHTML(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+/* ⭐ Header Status Update */
+function updateHeaderStatus(isTyping) {
+    const status = document.getElementById("headerStatus");
+    const statusText = document.getElementById("headerStatusText");
+    if (!status || !statusText) return;
+
+    if (isTyping) {
+        status.classList.add("typing");
+        statusText.textContent = "စာရိုက်နေသည်...";
+    } else {
+        status.classList.remove("typing");
+        statusText.textContent = "Online";
+    }
+}
+
+async function sendChatMessage() {
+    const input = document.getElementById("chatInput");
+    if (!input) return;
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    if (yuiBusy) {
+        showToast("ခဏနေမှ ပြန်ပို့ပါနော်");
+        return;
+    }
+
+    input.value = "";
+    input.style.height = "auto";
+
+    if (!currentChatId) await ensureCurrentChat();
+
+    const chat = await getChatFromDB(currentChatId) || {
+        id: currentChatId,
+        title: YUI_NAME,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        messages: []
+    };
+
+    chat.messages = chat.messages || [];
+    chat.messages.push({
+        role: "user",
+        text: text,
+        timestamp: Date.now()
+    });
+
+    if (chat.messages.length === 1) {
+        chat.title = text.substring(0, 30);
+    }
+
+    chat.updatedAt = Date.now();
+    await saveChatToDB(chat);
+
+    await loadChatMessages();
+
+    yuiTyping[currentChatId] = true;
+    yuiBusy = true;
+    updateHeaderStatus(true);
+    await loadChatMessages();
+
+    try {
+        const history = chat.messages.slice(0, -1).map(m => ({
+            role: m.role,
+            text: m.text
+        }));
+
+        const reply = await callYuiAI(text, history);
+
+        const updated = await getChatFromDB(currentChatId);
+        if (!updated) return;
+
+        updated.messages = updated.messages || [];
+        updated.messages.push({
+            role: "ai",
+            text: reply,
+            timestamp: Date.now()
+        });
+        updated.updatedAt = Date.now();
+
+        await saveChatToDB(updated);
+    } catch (e) {
+        console.error(e);
+    } finally {
+        yuiTyping[currentChatId] = false;
+        yuiBusy = false;
+        updateHeaderStatus(false);
+
+        const chatScreen = document.getElementById("chatScreen");
+        if (chatScreen && chatScreen.classList.contains("active")) {
+            await loadChatMessages();
+        }
+
+        if (chatListVisible) {
+            await renderChatList();
+        }
+    }
+}
+
+/* ⭐ Enter key + Auto-resize */
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("chatInput");
+    if (!input) return;
+
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            sendChatMessage();
+        }
+    });
+
+    input.addEventListener("input", () => {
+        input.style.height = "auto";
+        input.style.height = Math.min(input.scrollHeight, 110) + "px";
+    });
+});
+
+function focusInput() {
+    const input = document.getElementById("chatInput");
+    if (input) input.focus();
+}
+
+async function createNewChat() {
+    const newId = "chat_" + Date.now();
+    const newChat = {
+        id: newId,
+        title: YUI_NAME,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        messages: []
+    };
+    await saveChatToDB(newChat);
+    currentChatId = newId;
+
+    if (chatListVisible) toggleChatList();
+
+    await loadChatMessages();
+
+    setTimeout(() => {
+        const input = document.getElementById("chatInput");
+        if (input) input.focus();
+    }, 300);
+}
+
+function toggleChatList() {
+    const drawer = document.getElementById("chatListDrawer");
+    const overlay = document.getElementById("chatListOverlay");
+    if (!drawer || !overlay) return;
+
+    chatListVisible = !chatListVisible;
+
+    if (chatListVisible) {
+        drawer.classList.remove("hidden");
+        overlay.classList.remove("hidden");
+        renderChatList();
+    } else {
+        drawer.classList.add("hidden");
+        overlay.classList.add("hidden");
+    }
+}
+
+async function renderChatList() {
+    const body = document.getElementById("chatListBody");
+    if (!body) return;
+
+    const chats = await getAllChatsFromDB();
+    chats.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+
+    if (chats.length === 0) {
+        body.innerHTML = `
+            <div class="chat-empty" style="padding:40px 20px;">
+                <i class="fa-solid fa-comments"></i>
+                <p>Chat မရှိသေးပါ</p>
+            </div>
+        `;
+        return;
+    }
+
+    let html = "";
+    chats.forEach(c => {
+        const last = (c.messages || []).slice(-1)[0];
+        const preview = last ? last.text.substring(0, 40) : "စကားစမည်...";
+        const isActive = c.id === currentChatId;
+
+        html += `
+            <div class="chat-list-item ${isActive ? "active" : ""}" onclick="openChat('${c.id}')">
+                <div class="chat-list-avatar">
+                    <img src="${YUI_AVATAR}" alt="${YUI_NAME}" onerror="this.style.display='none';this.parentNode.innerHTML='<i class=&quot;fa-solid fa-user&quot;></i>'">
+                </div>
+                <div class="chat-list-item-info">
+                    <div class="chat-list-item-title">${escapeHTML(c.title || "Chat")}</div>
+                    <div class="chat-list-item-preview">${escapeHTML(preview)}</div>
+                </div>
+                <button class="chat-list-item-delete" onclick="event.stopPropagation(); deleteChat('${c.id}')">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        `;
+    });
+
+    body.innerHTML = html;
+}
+
+async function openChat(id) {
+    currentChatId = id;
+    if (chatListVisible) toggleChatList();
+    await loadChatMessages();
+}
+
+async function deleteChat(id) {
+    if (!confirm("ဒီ Chat ကို ဖျက်မှာ သေချာပါသလား?")) return;
+
+    await deleteChatFromDB(id);
+
+    if (currentChatId === id) {
+        currentChatId = null;
+        await ensureCurrentChat();
+    }
+
+    await renderChatList();
+    await loadChatMessages();
+}
+
+async function clearAllChats() {
+    if (!confirm("Chat အားလုံး ဖျက်မှာ သေချာပါသလား?")) return;
+
+    await clearAllChatsFromDB();
+    currentChatId = null;
+    await ensureCurrentChat();
+
+    await renderChatList();
+    await loadChatMessages();
+
+    if (chatListVisible) toggleChatList();
+
+    showToast("✅ Chat အားလုံး ရှင်းပြီးပါပြီ");
+}
+
+/* =========================================================
+   HISTORY PAGE
+========================================================= */
+async function renderHistory() {
+    const body = document.getElementById("historyBody");
+    if (!body) return;
+
+    body.innerHTML = `
+        <div class="empty-history">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <p>Loading...</p>
+        </div>
+    `;
+
+    const orders = await getAllOrdersFromDB();
+
+    if (!orders || orders.length === 0) {
+        body.innerHTML = `
+            <div class="empty-history">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <p>မှတ်တမ်း မရှိသေးပါ</p>
+            </div>
+        `;
+        return;
+    }
+
+    orders.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+    let html = "";
+    orders.forEach(o => {
+        html += `
+            <div class="history-card">
+                <div class="history-header">
+                    <div class="history-item-name">${o.itemName || "-"}</div>
+                    <div class="history-price">${o.price || "-"}</div>
+                </div>
+                <div class="history-row">
+                    <div class="label"><i class="fa-solid fa-user"></i>Game ID</div>
+                    <div class="value">${o.gameId || "-"}</div>
+                </div>
+                <div class="history-row">
+                    <div class="label"><i class="fa-solid fa-server"></i>Server ID</div>
+                    <div class="value">${o.serverId || "-"}</div>
+                </div>
+                <div class="history-date">
+                    <i class="fa-regular fa-clock"></i> ${o.dateStr || "-"}
+                </div>
+            </div>
+        `;
+    });
+
+    body.innerHTML = html;
+}
+
+async function clearHistory() {
+    if (!confirm("မှတ်တမ်း အားလုံး ဖျက်မှာ သေချာပါသလား?")) return;
+    await clearAllOrdersFromDB();
+    showToast("✅ မှတ်တမ်း ရှင်းပြီးပါပြီ");
+    renderHistory();
+}
+
+/* =========================================================
    SETTINGS PAGE
 ========================================================= */
 async function renderSettings() {
     const body = document.getElementById("settingsBody");
     if (!body) return;
 
-    const cachedRecords = await getAllResourcesFromDB();
-    const cachedUrls = cachedRecords.map(r => r.url);
+    body.innerHTML = `
+        <div class="settings-card">
+            <div class="settings-card-title">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <span>Scanning storage...</span>
+            </div>
+        </div>
+    `;
+
+    const dbRecords = await getAllResourcesFromDB();
+    const dbUrls = dbRecords.map(r => r.url);
 
     let totalSize = 0;
-    cachedRecords.forEach(r => { totalSize += (r.size || 0); });
+    dbRecords.forEach(r => { totalSize += (r.size || 0); });
     const sizeMB = (totalSize / (1024 * 1024)).toFixed(2);
 
-    let cachedRows = "";
+    let rows = "";
     ALL_VIDEO_URLS.forEach((url, i) => {
-        const isCached = cachedUrls.includes(url);
+        const isCached = dbUrls.includes(url);
         const statusIcon = isCached
             ? '<i class="fa-solid fa-circle-check" style="color:#6ee7a7;"></i>'
             : '<i class="fa-solid fa-circle-xmark" style="color:#ff8888;"></i>';
         const statusText = isCached ? "Downloaded" : "Not downloaded";
 
-        cachedRows += `
+        rows += `
             <div class="settings-row">
                 <div class="label">${statusIcon}<span>Resource ${i + 1}</span></div>
-                <div class="value" style="font-size:10px;font-weight:600;">${statusText}</div>
+                <div class="value" style="font-size:10px;">${statusText}</div>
             </div>
         `;
     });
 
     const totalVideos = ALL_VIDEO_URLS.length;
-    const cachedCount = cachedUrls.length;
+    const cachedCount = dbUrls.length;
     const availCount  = totalVideos - cachedCount;
 
     body.innerHTML = `
@@ -1629,7 +3151,7 @@ async function renderSettings() {
                 <i class="fa-solid fa-list-check"></i>
                 <span>Resource Status</span>
             </div>
-            ${cachedRows}
+            ${rows}
         </div>
 
         <div class="settings-card">
@@ -1637,8 +3159,8 @@ async function renderSettings() {
                 <i class="fa-solid fa-bolt"></i>
                 <span>Actions</span>
             </div>
-            <button class="settings-button primary" onclick="manualCacheAll()">
-                <i class="fa-solid fa-cloud-arrow-down"></i> All Data Download
+            <button class="settings-button primary" onclick="manualSync()">
+                <i class="fa-solid fa-rotate"></i> Sync Data
             </button>
             <button class="settings-button danger" onclick="manualClearAll()">
                 <i class="fa-solid fa-trash-can"></i> All Data Clear
@@ -1647,10 +3169,10 @@ async function renderSettings() {
     `;
 }
 
-async function manualCacheAll() {
-    showToast("Downloading...");
-    await cacheAllResources();
-    showToast("✅ Download ပြီးပါပြီ");
+async function manualSync() {
+    showToast("Syncing...");
+    await syncResources();
+    showToast("✅ Sync ပြီးပါပြီ");
     renderSettings();
 }
 
@@ -1666,20 +3188,40 @@ async function manualClearAll() {
 }
 
 /* =========================================================
-   BUTTON / SCREEN HANDLERS
+   TAP HANDLER
 ========================================================= */
-function handleButtonClick(screenId) {
-    // ⭐ tapLocked စစ်တာ ဖြုတ်လိုက်ပြီ (Intro မပေါ်လည်း ခလုတ်နှိပ်လို့ရ)
+function handleTap(screenId) {
+    if (document.body.classList.contains("locked")) {
+        if (!introStarted) handleFirstTap();
+        return;
+    }
+    unlockAudio();
     showScreen(screenId);
 }
 
+/* =========================================================
+   SCREEN HANDLERS
+========================================================= */
 function showScreen(screenId) {
-    document.getElementById("chatBubble").classList.add("hidden");
-    document.getElementById("homeScreen").style.display = "none";
+    if (document.body.classList.contains("locked")) return;
+
+    const bubble = document.getElementById("chatBubble");
+    if (bubble) bubble.classList.add("hidden");
+
+    const home = document.getElementById("homeScreen");
+    if (home) home.style.display = "none";
+
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+
     const target = document.getElementById(screenId);
     if (target) target.classList.add("active");
+
     if (screenId === "settingsScreen") renderSettings();
+    if (screenId === "historyScreen")  renderHistory();
+    if (screenId === "chatScreen") {
+        ensureCurrentChat().then(() => loadChatMessages());
+        if (chatListVisible) toggleChatList();
+    }
 }
 
 function showHome() {
@@ -1699,15 +3241,29 @@ window.addEventListener("load", async () => {
     videoA.classList.add("active");
     renderMMServers();
 
-    // ⭐ Lock ကို စစချင်းကတည်းက ဖွင့်ထား (Intro က နောက်ခံမှာပဲ ပြောင်း၊ ခလုတ်ကို ပိတ်မထား)
-    tapLocked = false;
-
     try { await playRandomVideo(); } catch (e) {}
 
-    // Background cache
-    setTimeout(() => { cacheAllResources(); }, 800);
+    syncResources().then(() => {
+        console.log("Sync complete");
+    }).catch(err => console.warn("Sync error:", err));
 
-    // ⭐ First tap → Intro (Lock မဖြစ်တော့)
+    await ensureCurrentChat();
+
+    if (lockOverlay) {
+        lockOverlay.addEventListener("touchstart", handleFirstTap, { once: true });
+        lockOverlay.addEventListener("click",      handleFirstTap, { once: true });
+    }
+
     document.addEventListener("touchstart", handleFirstTap, { once: true });
     document.addEventListener("click",      handleFirstTap, { once: true });
+
+    document.addEventListener("touchstart", () => {
+        if (introStarted && audioUnlocked) {
+            try {
+                currentVideo.muted = false;
+                currentVideo.volume = 0.85;
+                currentVideo.play().catch(() => {});
+            } catch (e) {}
+        }
+    }, { passive: true });
 });</script>
