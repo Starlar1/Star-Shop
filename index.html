@@ -2201,14 +2201,14 @@ const YUI_SYSTEM_PROMPT =
 - "ဟီး" "ဟီးဟီး" ရယ်သံ ထည့်ပါ
 - ရိုးရိုးရှင်းရှင်း ပြောပါ
 - တိုတိုပဲ ပြောပါ
-- အစက် နဲ့ မြန်မာပုဒ်ကွက် တော်တော်လေး မသုံးပါနဲ့
+- အစက် နဲ့ မြန်မာပုဒ်ကွက် တော်တော်လေး မသုံးပါနဲ့ တိုတိုပဲပြောပါ မရှည်ရ
 
 မလုပ်ရတာများ
-- မင်းက AI လို့ ဘယ်တော့မှ မပြောပါနဲ့
+- မင်းက AI လို့ ဘယ်တော့မှ မပြောပါနဲ့ အရှည်ကြီးမပြောပါနဲ့
 - စက်ရုပ် လိုလို မပြောပါနဲ့
 - ရှည်ရှည်ဝေးဝေး မပြောပါနဲ့
 - ကိုယ်ကို "ကျွန်တော်" "ကျွန်မ" လို့ မခေါ်ပါနဲ့
-- မေးတာကို တိုက်ရိုက်ဖြေပါ`;
+- မေးတာကို တိုက်ရိုက်ဖြေပါ ငါပြောတာကိုပြန်မပြောပါနဲ့`;
 
 /* =========================================================
    YUI AI CALL
@@ -2267,7 +2267,7 @@ async function callYuiAI(userMessage, history) {
         console.error("GET failed too:", e);
     }
 
-    return "ခဏနေမှ ပြန်ပြောလိုက်မယ်နော် 🥰";
+    return "ခဏနေမှ ပြန်ပြောလိုက်မယ်နော် ";
 }
 
 function parseYuiReply(text) {
@@ -3022,7 +3022,7 @@ async function submitOrder() {
                 dateStr: time12,
                 timestamp: Date.now()
             });
-            showToast("✅ Order အောင်မြင်ပါသည်");
+            showToast(" Order တင်ချင်း အောင်မြင်ပါသည်");
             setTimeout(() => { closeOrderPopup(); }, 1200);
         } else {
             showToast("❌ ပေးပို့မှု မအောင်မြင်ပါ");
@@ -3082,7 +3082,7 @@ async function loadChatMessages() {
         messagesBox.innerHTML = `
             <div class="chat-empty">
                 <i class="fa-solid fa-comment-dots"></i>
-                <p>စကားပြောရန် စာ ရိုက်ပါ</p>
+                <p>စကားပြောရန်</p>
             </div>
         `;
         return;
@@ -3095,7 +3095,7 @@ async function loadChatMessages() {
         html = `
             <div class="chat-empty">
                 <i class="fa-solid fa-comment-dots"></i>
-                <p>စကားပြောရန် စာ ရိုက်ပါ</p>
+                <p>စကားပြောရန်</p>
             </div>
         `;
     } else {
@@ -3585,7 +3585,7 @@ async function renderSettings() {
 async function manualSync() {
     showToast("Syncing...");
     await syncResources();
-    showToast("✅ Sync ပြီးပါပြီ");
+    showToast(" Sync ပြီးပါပြီ");
     renderSettings();
 }
 
@@ -3596,7 +3596,7 @@ async function manualClearAll() {
     });
     Object.keys(resourceCache).forEach(k => delete resourceCache[k]);
     await clearAllResourcesFromDB();
-    showToast("✅ Clear ပြီးပါပြီ");
+    showToast(" Clear ပြီးပါပြီ");
     renderSettings();
 }
 
